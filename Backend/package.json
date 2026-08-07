@@ -22,6 +22,9 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.5.0",
     "mongoose": "^9.9.0",
+    "multer": "^2.2.0",
+    "pdf-parse": "^2.4.5",
+    "pdf-parser": "^1.0.5",
     "zod": "^4.4.3",
     "zod-to-json-schema": "^3.25.2"
   }
