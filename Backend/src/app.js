@@ -7,7 +7,7 @@ const app =express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true
 }))
 
@@ -15,8 +15,8 @@ app.use(cors({
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-//using routes
-app.use("/api/auth", authRouter)
-app.use("/api/interview", interviewRouter)
+//using auth routes
+app.use("/api/auth",authRouter)
+app.use("/api/interview",interviewRouter)
 
-module.exports = app
+module.exports=app
