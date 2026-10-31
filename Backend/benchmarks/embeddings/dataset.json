@@ -1,0 +1,116 @@
+{
+  "name": "analyser-skill-retrieval-mini-v1",
+  "language": "English corpus; English and Spanish queries",
+  "note": "Synthetic technical snippets only. Relevance means useful retrieval context; it does not mean equivalent proficiency.",
+  "queries": [
+    {
+      "id": "ui-components",
+      "text": "Build interactive web interfaces from reusable components.",
+      "directEvidenceChunkIds": ["react-components"],
+      "relatedContextChunkIds": ["angular-components", "nextjs-react"]
+    },
+    {
+      "id": "server-javascript",
+      "text": "Develop server-side JavaScript services.",
+      "directEvidenceChunkIds": ["node-runtime"],
+      "relatedContextChunkIds": ["express-server"]
+    },
+    {
+      "id": "rest-service",
+      "text": "Expose a RESTful service to other clients.",
+      "directEvidenceChunkIds": ["http-resources"],
+      "relatedContextChunkIds": ["graphql-operations", "api-payload-schema"]
+    },
+    {
+      "id": "containerization",
+      "text": "Package applications into portable containers.",
+      "directEvidenceChunkIds": ["oci-images"],
+      "relatedContextChunkIds": ["docker-build"]
+    },
+    {
+      "id": "relational-store",
+      "text": "Use PostgreSQL for relational data and transactions.",
+      "directEvidenceChunkIds": ["postgres-transaction"],
+      "relatedContextChunkIds": ["sql-relations", "java-transaction"]
+    },
+    {
+      "id": "cloud-deployment",
+      "text": "Deploy services and store files on AWS.",
+      "directEvidenceChunkIds": ["aws-services"],
+      "relatedContextChunkIds": ["azure-services"]
+    },
+    {
+      "id": "cluster-orchestration",
+      "text": "Orchestrate container workloads across a cluster.",
+      "directEvidenceChunkIds": ["kubernetes-workloads"],
+      "relatedContextChunkIds": ["docker-build"]
+    },
+    {
+      "id": "typed-javascript",
+      "text": "Add static types to JavaScript applications.",
+      "directEvidenceChunkIds": ["typescript-types"],
+      "relatedContextChunkIds": ["jsdoc-types"]
+    },
+    {
+      "id": "automated-delivery",
+      "text": "Automate testing and deployment for each code change.",
+      "directEvidenceChunkIds": ["delivery-workflow"],
+      "relatedContextChunkIds": []
+    },
+    {
+      "id": "document-database",
+      "text": "Store flexible JSON-like records in a NoSQL database.",
+      "directEvidenceChunkIds": ["mongo-documents"],
+      "relatedContextChunkIds": ["json-document", "postgres-jsonb"]
+    },
+    {
+      "id": "ui-components-es",
+      "language": "es",
+      "text": "Desarrollar interfaces web interactivas con componentes reutilizables.",
+      "directEvidenceChunkIds": ["react-components"],
+      "relatedContextChunkIds": ["angular-components", "nextjs-react"]
+    },
+    {
+      "id": "cloud-deployment-es",
+      "language": "es",
+      "text": "Desplegar servicios y almacenar archivos en AWS.",
+      "directEvidenceChunkIds": ["aws-services"],
+      "relatedContextChunkIds": ["azure-services"]
+    }
+  ],
+  "chunks": [
+    { "id": "react-components", "text": "Reusable view components compose into interactive browser interfaces and manage UI state." },
+    { "id": "angular-components", "text": "Angular components render interactive browser interfaces using templates and dependency injection." },
+    { "id": "nextjs-react", "text": "Next.js builds server-rendered web pages using React components and browser-side hydration." },
+    { "id": "node-runtime", "text": "The Node.js runtime executes JavaScript outside the browser for server-side applications." },
+    { "id": "express-server", "text": "Express.js is a lightweight Node.js framework for routing HTTP requests and middleware." },
+    { "id": "browser-javascript", "text": "Browser JavaScript updates page elements and handles user events on the client." },
+    { "id": "http-resources", "text": "A RESTful HTTP service exposes named resources with standard methods, status codes, and JSON representations." },
+    { "id": "graphql-operations", "text": "GraphQL APIs expose typed queries and mutations through a schema-driven endpoint." },
+    { "id": "oci-images", "text": "OCI container images package an application and its runtime dependencies for portable execution." },
+    { "id": "virtual-machines", "text": "Virtual machine images bundle an operating system for deployment on a hypervisor." },
+    { "id": "postgres-transaction", "text": "PostgreSQL is a relational database with SQL queries, indexes, and ACID transactions." },
+    { "id": "sql-relations-broad", "text": "Relational SQL databases organize rows into tables and support joins and transactions." },
+    { "id": "mongo-documents", "text": "MongoDB stores BSON documents in collections and supports flexible JSON-like records." },
+    { "id": "postgres-jsonb", "text": "PostgreSQL JSONB columns store nested JSON objects inside relational tables." },
+    { "id": "aws-services", "text": "AWS services such as S3 and EC2 provide object storage and compute for deployed applications." },
+    { "id": "azure-services", "text": "Microsoft Azure provides cloud compute, object storage, and managed application services." },
+    { "id": "kubernetes-workloads", "text": "Kubernetes schedules container workloads across cluster nodes and manages deployments and services." },
+    { "id": "docker-build", "text": "Docker builds and runs containers from images on a single host." },
+    { "id": "typescript-types", "text": "TypeScript adds static type checking to JavaScript and compiles to JavaScript for execution." },
+    { "id": "jsdoc-types", "text": "JSDoc annotations provide JavaScript editors with type hints without compiling TypeScript." },
+    { "id": "java-classes", "text": "Java uses classes and static type checking to build applications for the JVM." },
+    { "id": "delivery-workflow", "text": "A CI/CD workflow automatically runs tests and deploys changes when code is pushed." },
+    { "id": "manual-release", "text": "A release checklist guides a person through manual review and deployment steps." },
+    { "id": "sql-relations", "text": "Relational SQL databases organize rows into tables and support joins and transactions." },
+    { "id": "json-document", "text": "Document databases persist nested records without requiring a fixed relational table layout." },
+    { "id": "ui-accessibility", "text": "Audit keyboard navigation and screen-reader accessibility on browser forms." },
+    { "id": "javascript-cli", "text": "Write a JavaScript command-line utility that parses local files and prints a report." },
+    { "id": "api-payload-schema", "text": "Validate inbound JSON payloads against schemas before processing application requests." },
+    { "id": "zip-packaging", "text": "Distribute desktop software as compressed ZIP archives for end users." },
+    { "id": "file-ledger", "text": "Persist an append-only transaction ledger in local files on a single machine." },
+    { "id": "onprem-storage", "text": "Operate physical servers and network shares in a private data center." },
+    { "id": "java-transaction", "text": "Implement database transaction handling in a Java application using JDBC." },
+    { "id": "manual-release-checklist", "text": "A person follows a release checklist to review and deploy software manually." }
+  ]
+}

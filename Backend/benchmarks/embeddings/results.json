@@ -1,0 +1,113 @@
+{
+  "dataset": {
+    "name": "analyser-skill-retrieval-mini-v1",
+    "language": "English corpus; English and Spanish queries",
+    "queryCount": 12,
+    "corpusCount": 33,
+    "embeddedTextCount": 45
+  },
+  "iterations": 2,
+  "local": {
+    "model": "onnx-community/all-MiniLM-L6-v2-ONNX",
+    "dimensions": 384,
+    "initializationMs": 312.05230000000006,
+    "warmupBatchMs": null,
+    "timings": {
+      "meanBatchMs": 143.42255000000006,
+      "medianBatchMs": 143.42255000000006,
+      "batchMeasurementsMs": [
+        143.08530000000007,
+        143.75980000000004
+      ],
+      "meanMsPerInput": 3.187167777777779
+    },
+    "retrieval": {
+      "queryCount": 12,
+      "corpusCount": 33,
+      "recallAt1": 0.47222222222222215,
+      "recallAt3": 0.8472222222222222,
+      "directEvidenceRecallAt3": 1,
+      "relatedContextRecallAt3": 0.7272727272727273,
+      "meanReciprocalRank": 1,
+      "pairwiseAuc": 0.945603649068323
+    },
+    "retrievalByQueryLanguage": {
+      "en": {
+        "queryCount": 10,
+        "corpusCount": 33,
+        "recallAt1": 0.4833333333333333,
+        "recallAt3": 0.9,
+        "directEvidenceRecallAt3": 1,
+        "relatedContextRecallAt3": 0.8333333333333334,
+        "meanReciprocalRank": 1,
+        "pairwiseAuc": 0.9769862625690412
+      },
+      "es": {
+        "queryCount": 2,
+        "corpusCount": 33,
+        "recallAt1": 0.41666666666666663,
+        "recallAt3": 0.5833333333333333,
+        "directEvidenceRecallAt3": 1,
+        "relatedContextRecallAt3": 0.25,
+        "meanReciprocalRank": 1,
+        "pairwiseAuc": 0.8262295081967214
+      }
+    }
+  },
+  "hosted": {
+    "model": "gemini-embedding-2",
+    "dimensions": 768,
+    "timings": {
+      "meanBatchMs": 2432.3502,
+      "medianBatchMs": 2432.3502,
+      "batchMeasurementsMs": [
+        2674.5501000000004,
+        2190.1503
+      ],
+      "meanMsPerInput": 54.05222666666666
+    },
+    "reportedInputTokenCount": null,
+    "approximateWordCountForCostFallback": 932,
+    "approximateInputTokenCountForCostFallback": 1212,
+    "pricingRateUsdPerMillionTokens": 0.2,
+    "estimatedUsd": 0.0002424,
+    "retrieval": {
+      "queryCount": 12,
+      "corpusCount": 33,
+      "recallAt1": 0.47222222222222215,
+      "recallAt3": 0.9444444444444443,
+      "directEvidenceRecallAt3": 1,
+      "relatedContextRecallAt3": 0.9090909090909091,
+      "meanReciprocalRank": 1,
+      "pairwiseAuc": 0.976465450310559
+    },
+    "retrievalByQueryLanguage": {
+      "en": {
+        "queryCount": 10,
+        "corpusCount": 33,
+        "recallAt1": 0.4833333333333333,
+        "recallAt3": 0.9333333333333332,
+        "directEvidenceRecallAt3": 1,
+        "relatedContextRecallAt3": 0.8888888888888888,
+        "meanReciprocalRank": 1,
+        "pairwiseAuc": 0.9844922815465231
+      },
+      "es": {
+        "queryCount": 2,
+        "corpusCount": 33,
+        "recallAt1": 0.41666666666666663,
+        "recallAt3": 1,
+        "directEvidenceRecallAt3": 1,
+        "relatedContextRecallAt3": 1,
+        "meanReciprocalRank": 1,
+        "pairwiseAuc": 1
+      }
+    }
+  },
+  "notes": [
+    "Local initialization includes model loading and first-run model download; warm timings are reported separately.",
+    "Hosted API time is end-to-end latency for one batched request; repeated requests are included in reported token usage when returned, otherwise the word-count cost estimate covers all repetitions.",
+    "Retrieval relevance is a small synthetic context-relevance judgment and does not establish skill equivalence or proficiency."
+  ],
+  "measuredAt": "2026-10-31T10:15:14.795Z"
+}
