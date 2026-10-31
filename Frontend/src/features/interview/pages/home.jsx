@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Briefcase, User, UploadCloud, Star } from 'lucide-react'
 import '../style/home.scss'
@@ -17,7 +17,7 @@ const Home = () => {
     // Fetch existing reports when the page loads
     useEffect(() => {
         getAllReports()
-    }, [])
+    }, [getAllReports])
 
     
     const handleResumeChange = (e) => {

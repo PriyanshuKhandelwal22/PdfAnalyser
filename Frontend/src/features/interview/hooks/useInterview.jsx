@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { InterviewContext } from '../interview.context'
-import { generateReportApi, getReportByIdApi, getAllReportsApi, getResumePdfApi } from '../services/interview.api'
+import { useCallback, useContext } from 'react'
+import { InterviewContext } from '../interview.context.js'
+import { generateReportApi, getReportByIdApi, getAllReportsApi } from '../services/interview.api'
 
 export function useInterview() {
     const { loading, setLoading, report, setReport, reports, setReports } = useContext(InterviewContext)
@@ -8,7 +8,7 @@ export function useInterview() {
     /**
      * Generate a new interview report
      */
-    async function generateReport({ jobDescription, selfDescription, resumeFile }) {
+    const generateReport = useCallback(async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
         try {
             const newReport = await generateReportApi({ resumeFile, jobDescription, selfDescription })
@@ -20,12 +20,12 @@ export function useInterview() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [setLoading, setReport])
 
     /**
      * Fetch a single interview report by ID
      */
-    async function getReportById(interviewId) {
+    const getReportById = useCallback(async (interviewId) => {
         setLoading(true)
         try {
             const fetchedReport = await getReportByIdApi(interviewId)
@@ -33,12 +33,12 @@ export function useInterview() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [setLoading, setReport])
 
     /**
      * Fetch all interview reports for the logged-in user
      */
-    async function getAllReports() {
+    const getAllReports = useCallback(async () => {
         setLoading(true)
         try {
             const allReports = await getAllReportsApi()
@@ -46,25 +46,7 @@ export function useInterview() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [setLoading, setReports])
 
-    /**
-     * Generate and download a resume PDF for a given report
-     */
-    async function getResumePdf(interviewReportId) {
-        setLoading(true)
-        try {
-            const blob = await getResumePdfApi(interviewReportId)
-            const url = URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `resume-${interviewReportId}.pdf`
-            link.click()
-            URL.revokeObjectURL(url)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    return { loading, report, reports, generateReport, getReportById, getAllReports, getResumePdf }
+    return { loading, report, reports, generateReport, getReportById, getAllReports }
 }
