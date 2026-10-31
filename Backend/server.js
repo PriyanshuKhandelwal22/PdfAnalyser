@@ -1,3 +1,7 @@
+const dns = require("node:dns");
+
+dns.setServers(["10.222.31.15"]);
+
 require("dotenv").config()
 const app =require("./src/app")
 const connectToDB = require("./src/config/database")

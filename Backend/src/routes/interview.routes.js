@@ -1,54 +1,50 @@
-const express = require("express")
-const authMiddleware = require("../middleware/auth.middleware")
-const interviewController = require("../controllers/interview.controllers")
-const upload = require("../middleware/file.middleware")
 
-const interviewRouter = express.Router()
+const express = require("express");
+const authMiddleware = require("../middleware/auth.middleware");
+const interviewController = require("../controllers/interview.controllers");
+const uploadResume = require("../middleware/file.middleware");
 
+const interviewRouter = express.Router();
 
 /**
- * @route POST /api/interview/
- * @description Generate a new interview report (multipart/form-data with optional resume PDF)
- * @access Private
+ * POST /api/interview/
+ * Generate a new interview report.
  */
 interviewRouter.post(
     "/",
     authMiddleware,
-    upload.single("resume"),
+    uploadResume,
     interviewController.generateInterviewReportController
-)
+);
 
 /**
- * @route GET /api/interview/all
- * @description Get all interview reports of the logged-in user
- * @access Private
+ * GET /api/interview/all
+ * Get all reports belonging to the logged-in user.
  */
 interviewRouter.get(
     "/all",
     authMiddleware,
     interviewController.getAllInterviewReportsController
-)
+);
 
 /**
- * @route GET /api/interview/:interviewId
- * @description Get a single interview report by ID
- * @access Private
+ * GET /api/interview/:interviewId
+ * Get a single report belonging to the logged-in user.
  */
 interviewRouter.get(
     "/:interviewId",
     authMiddleware,
     interviewController.getInterviewReportByIdController
-)
+);
 
 /**
- * @route POST /api/interview/resume/pdf/:interviewReportId
- * @description Generate a resume PDF for a given interview report
- * @access Private
+ * POST /api/interview/resume/pdf/:interviewReportId
+ * PDF generation is not implemented yet.
  */
 interviewRouter.post(
     "/resume/pdf/:interviewReportId",
     authMiddleware,
     interviewController.generateResumePdfController
-)
+);
 
-module.exports = interviewRouter
+module.exports = interviewRouter;

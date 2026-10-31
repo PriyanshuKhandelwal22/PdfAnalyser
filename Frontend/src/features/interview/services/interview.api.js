@@ -1,65 +1,46 @@
-const BASE_URL = 'http://localhost:3000/api/interview'
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: "http://localhost:3000",
+    withCredentials: true,
+})
 
 /**
- * Generate an interview report by sending resume PDF + job/self description
- * @param {{ resumeFile: File, jobDescription: string, selfDescription: string }} data
+ * @description Service to generate interview report based on user self description, resume and job description.
  */
-export async function generateReportApi({ resumeFile, jobDescription, selfDescription }) {
+export const generateInterviewReport = async ({ jobDescription, selfDescription, resumeFile }) => {
+
     const formData = new FormData()
-    if (resumeFile) formData.append('resume', resumeFile)
-    formData.append('jobDescription', jobDescription)
-    formData.append('selfDescription', selfDescription)
+    formData.append("jobDescription", jobDescription)
+    formData.append("selfDescription", selfDescription)
+    formData.append("resume", resumeFile)
 
-    const res = await fetch(`${BASE_URL}/`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
+    const response = await api.post("/api/interview/", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Failed to generate report')
-    return data.interviewReport
+
+    return response.data
+
 }
 
-/**
- * Get a single interview report by its ID
- * @param {string} interviewId
- */
-export async function getReportByIdApi(interviewId) {
-    const res = await fetch(`${BASE_URL}/${interviewId}`, {
-        method: 'GET',
-        credentials: 'include',
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Failed to fetch report')
-    return data.interviewReport
-}
 
 /**
- * Get all interview reports for the logged-in user
+ * @description Service to get interview report by interviewId.
  */
-export async function getAllReportsApi() {
-    const res = await fetch(`${BASE_URL}/all`, {
-        method: 'GET',
-        credentials: 'include',
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Failed to fetch reports')
-    return data.interviewReports
+export const getInterviewReportById = async (interviewId) => {
+    const response = await api.get(`/api/interview/report/${interviewId}`)
+
+    return response.data
 }
 
+
 /**
- * Generate a resume PDF for a given interview report
- * @param {string} interviewReportId
+ * @description Service to get all interview reports of logged in user.
  */
-export async function getResumePdfApi(interviewReportId) {
-    const res = await fetch(`${BASE_URL}/resume/pdf/${interviewReportId}`, {
-        method: 'POST',
-        credentials: 'include',
-    })
-    if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.message || 'Failed to generate resume PDF')
-    }
-    // Returns a blob (PDF file)
-    return await res.blob()
+export const getAllInterviewReports = async () => {
+    const response = await api.get("/api/interview/")
+
+    return response.data
 }

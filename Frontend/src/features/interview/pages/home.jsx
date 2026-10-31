@@ -19,10 +19,41 @@ const Home = () => {
         getAllReports()
     }, [])
 
+    
     const handleResumeChange = (e) => {
-        const file = e.target.files?.[0]
-        setResumeFileName(file ? file.name : null)
-    }
+        const file = e.target.files?.[0];
+
+        setError(null);
+
+        if (!file) {
+            setResumeFileName(null);
+            return;
+        }
+
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+        // Validate the extension and browser-reported MIME type.
+        const isPdf =
+            file.name.toLowerCase().endsWith(".pdf") &&
+            file.type === "application/pdf";
+
+        if (!isPdf) {
+            setError("Please upload a PDF file only.");
+            e.target.value = "";
+            setResumeFileName(null);
+            return;
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+            setError("Resume must be 5 MB or smaller.");
+            e.target.value = "";
+            setResumeFileName(null);
+            return;
+        }
+
+        setResumeFileName(file.name);
+    };
+
 
     const handleGenerateReport = async () => {
         setError(null)
@@ -93,30 +124,44 @@ const Home = () => {
                         </div>
 
                         {/* Upload Resume */}
-                        <div className='upload-section'>
-                            <label className='section-label'>
+                        
+                        <div className="upload-section">
+                            <label className="section-label">
                                 Upload Resume
-                                <span className='badge badge--best'>Best Results</span>
+                                <span className="badge badge--best">Best Results</span>
                             </label>
-                            <label className='dropzone' htmlFor='resume'>
-                                <span className='dropzone__icon'>
+
+                            <label className="dropzone" htmlFor="resume">
+                                <span className="dropzone__icon">
                                     <UploadCloud size={28} />
                                 </span>
-                                <p className='dropzone__title'>
-                                    {resumeFileName || 'Click to upload or drag & drop'}
+
+                                <p className="dropzone__title">
+                                    {resumeFileName || "Click to upload or drag & drop"}
                                 </p>
-                                <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
+
+                                <p className="dropzone__subtitle">
+                                    PDF only (Max 5 MB)
+                                </p>
+
                                 <input
                                     ref={resumeInputRef}
                                     hidden
-                                    type='file'
-                                    id='resume'
-                                    name='resume'
-                                    accept='.pdf,.docx'
+                                    type="file"
+                                    id="resume"
+                                    name="resume"
+                                    accept=".pdf,application/pdf"
                                     onChange={handleResumeChange}
                                 />
                             </label>
+
+                            {error && (
+                                <p className="form-error" role="alert">
+                                    {error}
+                                </p>
+                            )}
                         </div>
+
 
                         {/* OR Divider */}
                         <div className='or-divider'><span>OR</span></div>
@@ -147,7 +192,11 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-
+                {error && (
+                    <p className="form-error" role="alert">
+                        {error}
+                    </p>
+                )}
                 {/* Card Footer */}
                 <div className='interview-card__footer'>
                     <span className='footer-info'>AI-Powered Strategy Generation &bull; Approx 30s</span>
