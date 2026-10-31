@@ -1,6 +1,10 @@
 
 const { PDFParse } = require("pdf-parse");
 const { generateInterviewReport } = require("../service/ai.service");
+const {
+    formatDocumentSections,
+    preprocessDocument,
+} = require("../service/text.preprocessing.service");
 const interviewReportModel = require("../models/interviewReport.models");
 
 /**
@@ -52,10 +56,31 @@ async function generateInterviewReportController(req, res) {
             });
         }
 
+        const resumeDocument = preprocessDocument({
+            text: resumeText,
+            source: "resume",
+            documentType: "resume",
+        });
+        const selfDescriptionDocument = preprocessDocument({
+            text: selfDescription,
+            source: "selfDescription",
+            documentType: "resume",
+        });
+        const jobDescriptionDocument = preprocessDocument({
+            text: jobDescription,
+            source: "jobDescription",
+            documentType: "jobDescription",
+        });
+
         const interviewReportByAi = await generateInterviewReport({
-            resume: resumeText,
-            selfDescription,
-            jobDescription,
+            resume: formatDocumentSections(resumeDocument),
+            selfDescription: formatDocumentSections(selfDescriptionDocument),
+            jobDescription: formatDocumentSections(jobDescriptionDocument),
+            candidateSkillEvidence: [
+                ...resumeDocument.skills,
+                ...selfDescriptionDocument.skills,
+            ],
+            jobSkillEvidence: jobDescriptionDocument.skills,
         });
 
         const interviewReport = new interviewReportModel({
