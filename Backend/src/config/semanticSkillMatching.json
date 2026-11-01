@@ -1,6 +1,6 @@
 {
   "modelId": "onnx-community/all-MiniLM-L6-v2-ONNX",
   "dimensions": 384,
-  "reviewThreshold": 0.24565485109760882,
-  "semanticThreshold": 0.5173532433608568
+  "reviewThreshold": 0.23849359320834318,
+  "semanticThreshold": 0.4962938233722085
 }

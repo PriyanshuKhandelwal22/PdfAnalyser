@@ -17,7 +17,7 @@ function embedByKey(values) {
 
 test("classifies exact skills without invoking the embedder", async () => {
     const matches = await analyzeSkillMatches({
-        candidateSkills: [{ skill: "React", matchedText: "React", evidence: "Used React." }],
+        candidateSkills: [{ skill: "React", matchedText: "React", section: "experience", evidence: "Used React." }],
         jobSkills: [{ skill: "React", matchedText: "React" }],
         thresholds,
         embedTexts: async () => { throw new Error("Exact matches must not need embeddings."); },
@@ -45,8 +45,8 @@ test("classifies catalogued aliases and preserves candidate provenance", async (
 test("classifies embedding matches and retains the strongest candidate evidence", async () => {
     const matches = await analyzeSkillMatches({
         candidateSkills: [
-            { skill: "Automated testing", source: "resume", section: "experience", evidence: "Authored automated tests." },
-            { skill: "Unrelated item" },
+            { skill: "Automated testing", matchedText: "Automated testing", source: "resume", section: "experience", evidence: "Authored automated testing suites." },
+            { skill: "Unrelated item", evidence: "Used unrelated item." },
         ],
         jobSkills: [{ skill: "Software testing" }],
         thresholds,
@@ -59,7 +59,7 @@ test("classifies embedding matches and retains the strongest candidate evidence"
 
     assert.equal(matches[0].classification, CLASSIFICATIONS.RELATED);
     assert.equal(matches[0].candidateSkill, "Automated testing");
-    assert.equal(matches[0].candidateEvidence, "Authored automated tests.");
+    assert.equal(matches[0].candidateEvidence, "Authored automated testing suites.");
     assert.ok(matches[0].similarity >= thresholds.semanticThreshold);
     assert.match(matches[0].explanation, /does not establish equivalent proficiency/);
 });
@@ -93,6 +93,40 @@ test("does not require embeddings when no candidate evidence exists", async () =
 
     assert.equal(matches[0].classification, CLASSIFICATIONS.MISSING);
     assert.equal(matches[0].similarity, null);
+    assert.equal(matches[0].candidateEvidenceClassification, "No Evidence");
+});
+
+test("does not treat a bare skills-list entry as practical positive evidence", async () => {
+    const matches = await analyzeSkillMatches({
+        candidateSkills: [{ skill: "Docker", matchedText: "Docker", section: "skills", evidence: "Docker" }],
+        jobSkills: [{ skill: "Docker" }],
+        thresholds,
+        embedTexts: async () => { throw new Error("Exact terms should use their evidence classification."); },
+    });
+
+    assert.equal(matches[0].classification, CLASSIFICATIONS.REVIEW);
+    assert.equal(matches[0].candidateEvidenceClassification, "Uncertain/Familiarity-only");
+});
+
+test("does not use a negated technology as semantic evidence for another requirement", async () => {
+    const matches = await analyzeSkillMatches({
+        candidateSkills: [{
+            skill: "Docker",
+            matchedText: "Docker",
+            section: "experience",
+            evidence: "No hands-on experience with Docker.",
+        }],
+        jobSkills: [{ skill: "Container orchestration" }],
+        thresholds,
+        embedTexts: embedByKey({
+            "Container orchestration": vector(0),
+            Docker: vector(0),
+        }),
+    });
+
+    assert.equal(matches[0].classification, CLASSIFICATIONS.MISSING);
+    assert.equal(matches[0].candidateSkill, null);
+    assert.equal(matches[0].candidateEvidenceClassification, "No Evidence");
 });
 
 test("rejects malformed embedding output and invalid thresholds", async () => {

@@ -1,7 +1,12 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { canonicalizeSkill, normalizeSkillKey } = require("../../src/service/text.preprocessing.service");
-const { cosineSimilarity, CLASSIFICATIONS } = require("../../src/service/semanticSkillMatching.service");
+const {
+    cosineSimilarity,
+    CLASSIFICATIONS,
+    analyzeSkillMatches,
+} = require("../../src/service/semanticSkillMatching.service");
+const { classifySkillEvidence, EVIDENCE_CLASSIFICATIONS } = require("../../src/service/skillEvidence.service");
 
 const DATASET_PATH = path.join(__dirname, "dataset.json");
 const RESULTS_PATH = path.join(__dirname, "results.json");
@@ -11,6 +16,8 @@ const SEMANTIC_LABELS = [
     CLASSIFICATIONS.REVIEW,
     CLASSIFICATIONS.MISSING,
 ];
+const RELATIONSHIPS = new Set(["exact", "alias", "true_semantic", "related_non_equivalent", "unrelated", "ambiguous"]);
+const EVIDENCE_LABELS = Object.values(EVIDENCE_CLASSIFICATIONS);
 
 function readDataset() {
     const dataset = JSON.parse(fs.readFileSync(DATASET_PATH, "utf8"));
@@ -20,7 +27,8 @@ function readDataset() {
         ids.add(pair.id);
         if (typeof pair.requiredSkill !== "string" || !pair.requiredSkill.trim()
             || typeof pair.candidateSkill !== "string" || !pair.candidateSkill.trim()
-            || ![...EXACT_LABELS, ...SEMANTIC_LABELS].includes(pair.label)) {
+            || ![...EXACT_LABELS, ...SEMANTIC_LABELS].includes(pair.label)
+            || !RELATIONSHIPS.has(pair.relationship)) {
             throw new Error(`Invalid skill pair '${pair.id}'.`);
         }
     }
@@ -29,6 +37,18 @@ function readDataset() {
             throw new Error(`Dataset must contain at least one '${label}' example.`);
         }
     }
+    const evidenceIds = new Set();
+    for (const example of dataset.evidenceCases || []) {
+        if (!example.id || evidenceIds.has(example.id)
+            || typeof example.skill !== "string" || !example.skill.trim()
+            || typeof example.evidence !== "string"
+            || !EVIDENCE_LABELS.includes(example.expected)
+            || !Object.values(CLASSIFICATIONS).includes(example.expectedMatch)) {
+            throw new Error(`Invalid evidence example '${example.id}'.`);
+        }
+        evidenceIds.add(example.id);
+    }
+    if (!dataset.evidenceCases?.length) throw new Error("Dataset must contain labeled evidence cases.");
     return dataset;
 }
 
@@ -45,8 +65,7 @@ function classifyPair(pair, score, thresholds) {
     return CLASSIFICATIONS.MISSING;
 }
 
-function calculateClassMetrics(pairs, predictions) {
-    const classes = [...EXACT_LABELS, ...SEMANTIC_LABELS];
+function calculateMetrics(pairs, predictions, classes) {
     const confusion = Object.fromEntries(classes.map((label) => [
         label,
         Object.fromEntries(classes.map((predicted) => [predicted, 0])),
@@ -69,6 +88,10 @@ function calculateClassMetrics(pairs, predictions) {
         perClass,
         confusionMatrix: confusion,
     };
+}
+
+function calculateClassMetrics(pairs, predictions) {
+    return calculateMetrics(pairs, predictions, [...EXACT_LABELS, ...SEMANTIC_LABELS]);
 }
 
 function candidateThresholds(pairs) {
@@ -160,6 +183,32 @@ async function runBenchmark() {
     }));
     const thresholds = calibrateThresholds(scoredPairs);
     const predictions = new Map(scoredPairs.map((pair) => [pair.id, classifyPair(pair, pair.score, thresholds)]));
+    const evidenceResults = await Promise.all(dataset.evidenceCases.map(async (example) => {
+        const predictedEvidence = classifySkillEvidence({
+            evidence: example.evidence,
+            matchedText: example.skill,
+            section: example.section,
+        });
+        const candidateSkills = predictedEvidence === EVIDENCE_CLASSIFICATIONS.NONE ? [] : [{
+            skill: example.skill,
+            matchedText: example.skill,
+            section: example.section,
+            source: "resume",
+            evidence: example.evidence,
+        }];
+        const [match] = await analyzeSkillMatches({
+            candidateSkills,
+            jobSkills: [{ skill: example.skill }],
+            embedTexts: async () => { throw new Error("Evidence fixtures should not require semantic embeddings."); },
+        });
+        return {
+            ...example,
+            predictedEvidence: predictedEvidence,
+            predictedMatch: match.classification,
+        };
+    }));
+    const evidencePredictions = new Map(evidenceResults.map(({ id, predictedEvidence }) => [id, predictedEvidence]));
+    const evidenceMatchPredictions = new Map(evidenceResults.map(({ id, predictedMatch }) => [id, predictedMatch]));
     const results = {
         dataset: { name: dataset.name, pairCount: scoredPairs.length },
         model: { id: require("../../src/config/embeddingChunks.vector-index.json").modelId, dimensions: vectors[0].length },
@@ -179,11 +228,29 @@ async function runBenchmark() {
             hybridOnCalibrationSet: calculateClassMetrics(scoredPairs, predictions),
             hybridLeaveOneOut: evaluateLeaveOneOut(scoredPairs),
         },
-        pairs: scoredPairs.map(({ id, requiredSkill, candidateSkill, label, score }) => ({
+        relationshipCounts: Object.fromEntries([...RELATIONSHIPS].map((relationship) => [
+            relationship,
+            scoredPairs.filter((pair) => pair.relationship === relationship).length,
+        ])),
+        evidenceEvaluation: {
+            evidenceClassification: calculateMetrics(
+                evidenceResults.map((example) => ({ ...example, label: example.expected })),
+                evidencePredictions,
+                EVIDENCE_LABELS,
+            ),
+            matchClassification: calculateMetrics(
+                evidenceResults.map((example) => ({ ...example, label: example.expectedMatch })),
+                evidenceMatchPredictions,
+                Object.values(CLASSIFICATIONS),
+            ),
+            examples: evidenceResults,
+        },
+        pairs: scoredPairs.map(({ id, requiredSkill, candidateSkill, label, relationship, score }) => ({
             id,
             requiredSkill,
             candidateSkill,
             expected: label,
+            relationship,
             predicted: predictions.get(id),
             cosineSimilarity: score,
         })),

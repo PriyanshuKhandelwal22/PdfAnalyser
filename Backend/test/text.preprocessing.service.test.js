@@ -4,6 +4,7 @@ const test = require("node:test");
 const {
     canonicalizeSkill,
     cleanText,
+    deduplicateSkills,
     extractSkills,
     formatDocumentSections,
     preprocessDocument,
@@ -71,6 +72,29 @@ test("canonicalizeSkill shares the preprocessing alias catalog", () => {
     assert.equal(canonicalizeSkill("K8s"), "Kubernetes");
     assert.equal(canonicalizeSkill(" A skill outside the catalog "), "A skill outside the catalog");
     assert.equal(canonicalizeSkill("  "), "");
+});
+
+test("catalogs ML and new framework skills without conflating CPP and C++", () => {
+    assert.equal(canonicalizeSkill("ML"), "Machine Learning");
+    assert.equal(canonicalizeSkill("CPP"), "CPP");
+    assert.equal(canonicalizeSkill("C++"), "C++");
+    assert.equal(canonicalizeSkill("TensorFlow"), "TensorFlow");
+    assert.equal(canonicalizeSkill("PyTorch"), "PyTorch");
+    assert.equal(canonicalizeSkill("Front-End Development"), "Frontend Development");
+});
+
+test("deduplicates equivalent requirements while retaining every evidence excerpt", () => {
+    const unique = deduplicateSkills([
+        { skill: "React", matchedText: "React", source: "jobDescription", section: "requiredSkills", evidence: "React expertise required." },
+        { skill: "React", matchedText: "React.js", source: "jobDescription", section: "preferredSkills", evidence: "React.js experience preferred." },
+    ]);
+
+    assert.equal(unique.length, 1);
+    assert.equal(unique[0].skill, "React");
+    assert.deepEqual(unique[0].evidenceItems.map(({ matchedText, section, evidence }) => ({ matchedText, section, evidence })), [
+        { matchedText: "React", section: "requiredSkills", evidence: "React expertise required." },
+        { matchedText: "React.js", section: "preferredSkills", evidence: "React.js experience preferred." },
+    ]);
 });
 
 test("related skills are not treated as aliases and React Native is not React", () => {

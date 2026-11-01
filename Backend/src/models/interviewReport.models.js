@@ -49,6 +49,15 @@ const skillGapSchema = new mongoose.Schema({
     _id: false
 })
 
+const skillEvidenceSchema = new mongoose.Schema({
+    matchedText: { type: String, default: null },
+    source: { type: String, default: null },
+    section: { type: String, default: null },
+    evidence: { type: String, default: null },
+}, {
+    _id: false,
+})
+
 const skillMatchSchema = new mongoose.Schema({
     requiredSkill: {
         type: String,
@@ -81,6 +90,15 @@ const skillMatchSchema = new mongoose.Schema({
     candidateEvidence: {
         type: String,
         default: null,
+    },
+    candidateEvidenceClassification: {
+        type: String,
+        enum: [ "Positive Assertion", "Negative Assertion", "Uncertain/Familiarity-only", "Learning/In-progress", "No Evidence" ],
+        default: "No Evidence",
+    },
+    requiredEvidence: {
+        type: [ skillEvidenceSchema ],
+        default: [],
     },
     explanation: {
         type: String,

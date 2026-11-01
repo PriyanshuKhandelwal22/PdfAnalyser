@@ -180,6 +180,13 @@ const Interview = () => {
                                                 <p className='skill-match-card__score'>Cosine similarity: {match.similarity.toFixed(3)}</p>
                                             )}
                                             <p className='skill-match-card__explanation'>{match.explanation}</p>
+                                            <p className='skill-match-card__evidence-status'>Evidence status: {match.candidateEvidenceClassification || 'No Evidence'}</p>
+                                            {match.requiredEvidence?.map((item, evidenceIndex) => item.evidence && (
+                                                <blockquote className='skill-match-card__evidence skill-match-card__evidence--required' key={`required-${evidenceIndex}`}>
+                                                    <p>{item.evidence}</p>
+                                                    <cite>{[item.source, item.section].filter(Boolean).join(' · ') || 'Job description'}</cite>
+                                                </blockquote>
+                                            ))}
                                             {match.candidateEvidence && (
                                                 <blockquote className='skill-match-card__evidence'>
                                                     <p>{match.candidateEvidence}</p>

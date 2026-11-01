@@ -7,7 +7,11 @@ const SKILL_CATALOG = [
     { skill: "Express.js", aliases: ["Express.js", "ExpressJS", "Express"] },
     { skill: "REST APIs", aliases: ["RESTful APIs", "RESTful API", "REST APIs", "REST API"] },
     { skill: "API Development", aliases: ["API Development", "API Design"] },
+    { skill: "Frontend Development", aliases: ["Frontend Development", "Front-End Development", "Front End Development"] },
     { skill: "GraphQL", aliases: ["GraphQL"] },
+    // ML is an established abbreviation in skill contexts. CPP is deliberately
+    // not an alias for C++ because it is ambiguous outside that context.
+    { skill: "Machine Learning", aliases: ["Machine Learning", "Machine-Learning", "ML"] },
     { skill: "MongoDB", aliases: ["MongoDB"] },
     { skill: "PostgreSQL", aliases: ["PostgreSQL", "Postgres"] },
     { skill: "MySQL", aliases: ["MySQL"] },
@@ -18,6 +22,8 @@ const SKILL_CATALOG = [
     { skill: "Azure", aliases: ["Azure", "Microsoft Azure"] },
     { skill: "Google Cloud", aliases: ["Google Cloud Platform", "Google Cloud", "GCP"] },
     { skill: "Python", aliases: ["Python"] },
+    { skill: "TensorFlow", aliases: ["TensorFlow"] },
+    { skill: "PyTorch", aliases: ["PyTorch"] },
     { skill: "Java", aliases: ["Java"] },
     { skill: "C++", aliases: ["C++"] },
     { skill: "C#", aliases: ["C#", "C Sharp"] },
@@ -53,6 +59,41 @@ function canonicalizeSkill(value) {
 
     const trimmedValue = value.trim();
     return SKILL_ALIAS_LOOKUP.get(normalizeSkillKey(trimmedValue)) || trimmedValue;
+}
+
+function deduplicateSkills(skills) {
+    if (!Array.isArray(skills)) {
+        return [];
+    }
+
+    const grouped = new Map();
+    for (const skill of skills) {
+        if (!skill || typeof skill.skill !== "string" || !skill.skill.trim()) {
+            continue;
+        }
+        const canonicalSkill = canonicalizeSkill(skill.skill);
+        const key = normalizeSkillKey(canonicalSkill);
+        const originalEvidence = Array.isArray(skill.evidenceItems) && skill.evidenceItems.length
+            ? skill.evidenceItems
+            : [{
+                matchedText: skill.matchedText || skill.skill,
+                source: skill.source || null,
+                section: skill.section || null,
+                evidence: skill.evidence || null,
+            }];
+        const existing = grouped.get(key);
+        if (!existing) {
+            grouped.set(key, {
+                ...skill,
+                skill: canonicalSkill,
+                evidenceItems: originalEvidence.map((item) => ({ ...item })),
+            });
+        } else {
+            existing.evidenceItems.push(...originalEvidence.map((item) => ({ ...item })));
+        }
+    }
+
+    return [...grouped.values()];
 }
 
 const SECTION_ALIASES = {
@@ -237,6 +278,7 @@ function formatDocumentSections(document) {
 module.exports = {
     canonicalizeSkill,
     cleanText,
+    deduplicateSkills,
     extractSkills,
     formatDocumentSections,
     normalizeSkillKey,

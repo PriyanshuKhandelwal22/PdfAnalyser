@@ -1,6 +1,7 @@
 const matchingConfig = require("../config/semanticSkillMatching.json");
 const { embedTexts: defaultEmbedTexts } = require("./embedding.service");
 const { canonicalizeSkill, normalizeSkillKey } = require("./text.preprocessing.service");
+const { classifySkillEvidence, EVIDENCE_CLASSIFICATIONS } = require("./skillEvidence.service");
 
 const CLASSIFICATIONS = Object.freeze({
     EXACT: "Exact Match",
@@ -19,12 +20,23 @@ function readSkill(value, label) {
     const matchedText = typeof entry.matchedText === "string" && entry.matchedText.trim()
         ? entry.matchedText.trim()
         : entry.skill.trim();
+    const skill = canonicalizeSkill(entry.skill);
+    const evidenceItems = Array.isArray(entry.evidenceItems) ? entry.evidenceItems.map((item) => ({
+        matchedText: typeof item.matchedText === "string" ? item.matchedText : null,
+        source: typeof item.source === "string" ? item.source : null,
+        section: typeof item.section === "string" ? item.section : null,
+        evidence: typeof item.evidence === "string" ? item.evidence : null,
+    })) : [];
     return {
-        skill: canonicalizeSkill(entry.skill),
+        skill,
         matchedText,
         source: typeof entry.source === "string" ? entry.source : null,
         section: typeof entry.section === "string" ? entry.section : null,
         evidence: typeof entry.evidence === "string" ? entry.evidence : null,
+        evidenceItems,
+        evidenceClassification: label === "candidateSkills"
+            ? classifySkillEvidence({ evidence: entry.evidence, matchedText, section: entry.section })
+            : EVIDENCE_CLASSIFICATIONS.NONE,
     };
 }
 
@@ -70,7 +82,7 @@ function exactOrAlias(candidateSkills, requiredSkill) {
         || candidates[0];
 }
 
-function describeMatch(requiredSkill, candidateSkill, classification, similarity = null) {
+function describeMatch(requiredSkill, candidateSkill, classification, similarity = null, evidenceClassification) {
     const reason = {
         [CLASSIFICATIONS.EXACT]: `Candidate evidence explicitly names ${candidateSkill?.matchedText || "the required skill"}.`,
         [CLASSIFICATIONS.ALIAS]: `${candidateSkill?.matchedText || "Candidate evidence"} is a catalogued alias of ${requiredSkill.skill}.`,
@@ -87,8 +99,47 @@ function describeMatch(requiredSkill, candidateSkill, classification, similarity
         candidateSource: candidateSkill?.source || null,
         candidateSection: candidateSkill?.section || null,
         candidateEvidence: candidateSkill?.evidence || null,
+        candidateEvidenceClassification: evidenceClassification
+            || candidateSkill?.evidenceClassification
+            || EVIDENCE_CLASSIFICATIONS.NONE,
+        requiredEvidence: requiredSkill.evidenceItems.length
+            ? requiredSkill.evidenceItems
+            : (requiredSkill.evidence ? [{
+                matchedText: requiredSkill.matchedText,
+                source: requiredSkill.source,
+                section: requiredSkill.section,
+                evidence: requiredSkill.evidence,
+            }] : []),
         explanation: reason,
     };
+}
+
+function unverifiedExactMatch(requiredSkill, candidateSkill) {
+    const negative = candidateSkill.evidenceClassification === EVIDENCE_CLASSIFICATIONS.NEGATIVE;
+    return describeMatch(
+        requiredSkill,
+        candidateSkill,
+        negative ? CLASSIFICATIONS.MISSING : CLASSIFICATIONS.REVIEW,
+        null,
+        candidateSkill.evidenceClassification,
+    );
+}
+
+function chooseBestEvidence(candidates, requiredSkill) {
+    const sameSkill = exactOrAlias(candidates, requiredSkill);
+    if (!sameSkill) return null;
+    const matchingCandidates = candidates.filter((candidate) => (
+        normalizeSkillKey(candidate.skill) === normalizeSkillKey(requiredSkill.skill)
+    ));
+    return matchingCandidates.find((candidate) => (
+        candidate.evidenceClassification === EVIDENCE_CLASSIFICATIONS.POSITIVE
+        && normalizeSkillKey(candidate.matchedText) === normalizeSkillKey(requiredSkill.matchedText)
+    ))
+        || matchingCandidates.find((candidate) => candidate.evidenceClassification === EVIDENCE_CLASSIFICATIONS.POSITIVE)
+        || matchingCandidates.find((candidate) => candidate.evidenceClassification === EVIDENCE_CLASSIFICATIONS.NEGATIVE)
+        || matchingCandidates.find((candidate) => candidate.evidenceClassification === EVIDENCE_CLASSIFICATIONS.LEARNING)
+        || matchingCandidates.find((candidate) => candidate.evidenceClassification === EVIDENCE_CLASSIFICATIONS.UNCERTAIN)
+        || matchingCandidates[0];
 }
 
 async function analyzeSkillMatches({
@@ -108,13 +159,15 @@ async function analyzeSkillMatches({
     const unmatchedRequirements = [];
 
     for (const requiredSkill of requirements) {
-        const candidateSkill = exactOrAlias(candidates, requiredSkill);
-        if (candidateSkill) {
+        const candidateSkill = chooseBestEvidence(candidates, requiredSkill);
+        if (candidateSkill?.evidenceClassification === EVIDENCE_CLASSIFICATIONS.POSITIVE) {
             const classification = normalizeSkillKey(candidateSkill.matchedText)
                 === normalizeSkillKey(requiredSkill.matchedText)
                 ? CLASSIFICATIONS.EXACT
                 : CLASSIFICATIONS.ALIAS;
             exactMatches.set(requiredSkill, describeMatch(requiredSkill, candidateSkill, classification));
+        } else if (candidateSkill) {
+            exactMatches.set(requiredSkill, unverifiedExactMatch(requiredSkill, candidateSkill));
         } else {
             unmatchedRequirements.push(requiredSkill);
         }
@@ -128,8 +181,16 @@ async function analyzeSkillMatches({
     if (typeof embedTexts !== "function") {
         throw new TypeError("embedTexts must be a function.");
     }
+    const semanticCandidates = candidates.filter((candidate) => (
+        candidate.evidenceClassification !== EVIDENCE_CLASSIFICATIONS.NEGATIVE
+    ));
+    if (!semanticCandidates.length) {
+        return requirements.map((requiredSkill) => exactMatches.get(requiredSkill)
+            || describeMatch(requiredSkill, null, CLASSIFICATIONS.MISSING));
+    }
+
     const termByKey = new Map();
-    for (const skill of [...unmatchedRequirements, ...candidates]) {
+    for (const skill of [...unmatchedRequirements, ...semanticCandidates]) {
         termByKey.set(normalizeSkillKey(skill.skill), skill.skill);
     }
     const terms = [...termByKey.values()];
@@ -147,7 +208,7 @@ async function analyzeSkillMatches({
     const semanticMatches = new Map();
     for (const requiredSkill of unmatchedRequirements) {
         let best = null;
-        for (const candidateSkill of candidates) {
+        for (const candidateSkill of semanticCandidates) {
             const similarity = cosineSimilarity(
                 vectorByKey.get(normalizeSkillKey(requiredSkill.skill)),
                 vectorByKey.get(normalizeSkillKey(candidateSkill.skill)),
@@ -155,16 +216,23 @@ async function analyzeSkillMatches({
             if (!best || similarity > best.similarity) best = { candidateSkill, similarity };
         }
 
-        const classification = best.similarity >= thresholds.semanticThreshold
-            ? CLASSIFICATIONS.RELATED
-            : best.similarity >= thresholds.reviewThreshold
+        const passesReviewThreshold = best.similarity >= thresholds.reviewThreshold;
+        const hasPositiveEvidence = best.candidateSkill.evidenceClassification === EVIDENCE_CLASSIFICATIONS.POSITIVE;
+        const classification = !passesReviewThreshold
+            ? CLASSIFICATIONS.MISSING
+            : !hasPositiveEvidence
                 ? CLASSIFICATIONS.REVIEW
-                : CLASSIFICATIONS.MISSING;
+                : best.similarity >= thresholds.semanticThreshold
+                    ? CLASSIFICATIONS.RELATED
+                    : CLASSIFICATIONS.REVIEW;
         semanticMatches.set(requiredSkill, describeMatch(
             requiredSkill,
             classification === CLASSIFICATIONS.MISSING ? null : best.candidateSkill,
             classification,
             best.similarity,
+            classification === CLASSIFICATIONS.MISSING
+                ? EVIDENCE_CLASSIFICATIONS.NONE
+                : best.candidateSkill.evidenceClassification,
         ));
     }
 
@@ -179,14 +247,15 @@ function createSkillReviewFallback({ candidateSkills, jobSkills } = {}) {
     const candidates = candidateSkills.map((entry) => readSkill(entry, "candidateSkills"));
     return jobSkills.map((entry) => {
         const requiredSkill = readSkill(entry, "jobSkills");
-        const candidateSkill = exactOrAlias(candidates, requiredSkill);
-        if (candidateSkill) {
+        const candidateSkill = chooseBestEvidence(candidates, requiredSkill);
+        if (candidateSkill?.evidenceClassification === EVIDENCE_CLASSIFICATIONS.POSITIVE) {
             const classification = normalizeSkillKey(candidateSkill.matchedText)
                 === normalizeSkillKey(requiredSkill.matchedText)
                 ? CLASSIFICATIONS.EXACT
                 : CLASSIFICATIONS.ALIAS;
             return describeMatch(requiredSkill, candidateSkill, classification);
         }
+        if (candidateSkill) return unverifiedExactMatch(requiredSkill, candidateSkill);
         return {
             ...describeMatch(requiredSkill, null, CLASSIFICATIONS.REVIEW),
             explanation: "Local embedding inference was unavailable; semantic coverage needs human review.",
@@ -196,6 +265,7 @@ function createSkillReviewFallback({ candidateSkills, jobSkills } = {}) {
 
 module.exports = {
     CLASSIFICATIONS,
+    EVIDENCE_CLASSIFICATIONS,
     analyzeSkillMatches,
     cosineSimilarity,
     createSkillReviewFallback,

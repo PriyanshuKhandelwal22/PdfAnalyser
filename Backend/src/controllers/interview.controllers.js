@@ -2,6 +2,7 @@
 const { PDFParse } = require("pdf-parse");
 const { generateInterviewReport } = require("../service/ai.service");
 const {
+    deduplicateSkills,
     formatDocumentSections,
     preprocessDocument,
 } = require("../service/text.preprocessing.service");
@@ -75,6 +76,7 @@ async function generateInterviewReportController(req, res) {
             source: "jobDescription",
             documentType: "jobDescription",
         });
+        const jobSkillEvidence = deduplicateSkills(jobDescriptionDocument.skills);
 
         const candidateSkillEvidence = [
             ...resumeDocument.skills,
@@ -84,13 +86,13 @@ async function generateInterviewReportController(req, res) {
         try {
             skillMatches = await analyzeSkillMatches({
                 candidateSkills: candidateSkillEvidence,
-                jobSkills: jobDescriptionDocument.skills,
+                jobSkills: jobSkillEvidence,
             });
         } catch (embeddingError) {
             console.error("Semantic skill analysis unavailable; retaining conservative review classifications.", embeddingError.message);
             skillMatches = createSkillReviewFallback({
                 candidateSkills: candidateSkillEvidence,
-                jobSkills: jobDescriptionDocument.skills,
+                jobSkills: jobSkillEvidence,
             });
         }
 
@@ -99,7 +101,7 @@ async function generateInterviewReportController(req, res) {
             selfDescription: formatDocumentSections(selfDescriptionDocument),
             jobDescription: formatDocumentSections(jobDescriptionDocument),
             candidateSkillEvidence,
-            jobSkillEvidence: jobDescriptionDocument.skills,
+            jobSkillEvidence,
         });
 
         const interviewReport = new interviewReportModel({

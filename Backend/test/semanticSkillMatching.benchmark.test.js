@@ -10,11 +10,32 @@ const { CLASSIFICATIONS } = require("../src/service/semanticSkillMatching.servic
 
 test("skill benchmark dataset has unique labeled synthetic pairs", () => {
     const dataset = readDataset();
-    assert.equal(dataset.pairs.length, 27);
+    assert.ok(dataset.pairs.length >= 37);
     assert.equal(new Set(dataset.pairs.map(({ id }) => id)).size, dataset.pairs.length);
     assert.ok(dataset.pairs.every(({ requiredSkill, candidateSkill }) => (
         requiredSkill && candidateSkill
     )));
+    assert.deepEqual(new Set(dataset.pairs.map(({ relationship }) => relationship)), new Set([
+        "exact", "alias", "true_semantic", "related_non_equivalent", "unrelated", "ambiguous",
+    ]));
+    for (const [requiredSkill, candidateSkill] of [
+        ["REST APIs", "API Development"],
+        ["Frontend Development", "React.js"],
+        ["Node.js", "Express.js"],
+        ["Docker", "Kubernetes"],
+        ["TensorFlow", "PyTorch"],
+        ["Docker", "Python"],
+        ["AWS", "MongoDB"],
+        ["Java", "JavaScript"],
+        ["React.js", "HTML"],
+        ["TensorFlow", "SQL"],
+        ["C++", "CPP"],
+        ["Machine Learning", "ML"],
+    ]) {
+        assert.ok(dataset.pairs.some((pair) => pair.requiredSkill === requiredSkill && pair.candidateSkill === candidateSkill));
+    }
+    assert.ok(dataset.evidenceCases.some(({ expected }) => expected === "Negative Assertion"));
+    assert.ok(dataset.evidenceCases.some(({ expected }) => expected === "Uncertain/Familiarity-only"));
 });
 
 test("calibration keeps deterministic baseline labels and learns semantic thresholds", () => {

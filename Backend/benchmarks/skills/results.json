@@ -1,66 +1,66 @@
 {
   "dataset": {
-    "name": "analyser-skill-match-mini-v1",
-    "pairCount": 27
+    "name": "analyser-skill-match-mini-v2",
+    "pairCount": 37
   },
   "model": {
     "id": "onnx-community/all-MiniLM-L6-v2-ONNX",
     "dimensions": 384
   },
   "thresholds": {
-    "reviewThreshold": 0.24565485109760882,
-    "semanticThreshold": 0.5173532433608568
+    "reviewThreshold": 0.23849359320834318,
+    "semanticThreshold": 0.4962938233722085
   },
   "calibration": {
-    "reviewThreshold": 0.24565485109760882,
-    "semanticThreshold": 0.5173532433608568,
-    "calibrationMacroF1": 0.8564102564102565,
-    "calibrationSemanticPrecision": 1,
-    "calibrationPairCount": 20,
-    "macroF1": 0.8564102564102565,
-    "semanticPrecision": 1,
-    "pairCount": 20,
+    "reviewThreshold": 0.23849359320834318,
+    "semanticThreshold": 0.4962938233722085,
+    "calibrationMacroF1": 0.7444444444444445,
+    "calibrationSemanticPrecision": 0.625,
+    "calibrationPairCount": 28,
+    "macroF1": 0.7444444444444445,
+    "semanticPrecision": 0.625,
+    "pairCount": 28,
     "method": "Joint macro-F1 threshold search over the labeled synthetic semantic/review/missing pairs; leave-one-out metrics are reported separately."
   },
   "comparison": {
     "exactAliasBaseline": {
-      "accuracy": 0.48148148148148145,
-      "macroF1": 0.49230769230769234,
+      "accuracy": 0.5135135135135135,
+      "macroF1": 0.5052631578947369,
       "perClass": {
         "Exact Match": {
           "precision": 1,
           "recall": 1,
           "f1": 1,
-          "support": 3
+          "support": 4
         },
         "Alias Match": {
           "precision": 1,
           "recall": 1,
           "f1": 1,
-          "support": 4
+          "support": 5
         },
         "Semantically Related": {
           "precision": 0,
           "recall": 0,
           "f1": 0,
-          "support": 9
+          "support": 7
         },
         "Needs Review": {
           "precision": 0,
           "recall": 0,
           "f1": 0,
-          "support": 5
+          "support": 11
         },
         "Missing Skill": {
-          "precision": 0.3,
+          "precision": 0.35714285714285715,
           "recall": 1,
-          "f1": 0.4615384615384615,
-          "support": 6
+          "f1": 0.5263157894736842,
+          "support": 10
         }
       },
       "confusionMatrix": {
         "Exact Match": {
-          "Exact Match": 3,
+          "Exact Match": 4,
           "Alias Match": 0,
           "Semantically Related": 0,
           "Needs Review": 0,
@@ -68,7 +68,7 @@
         },
         "Alias Match": {
           "Exact Match": 0,
-          "Alias Match": 4,
+          "Alias Match": 5,
           "Semantically Related": 0,
           "Needs Review": 0,
           "Missing Skill": 0
@@ -78,62 +78,62 @@
           "Alias Match": 0,
           "Semantically Related": 0,
           "Needs Review": 0,
-          "Missing Skill": 9
+          "Missing Skill": 7
         },
         "Needs Review": {
           "Exact Match": 0,
           "Alias Match": 0,
           "Semantically Related": 0,
           "Needs Review": 0,
-          "Missing Skill": 5
+          "Missing Skill": 11
         },
         "Missing Skill": {
           "Exact Match": 0,
           "Alias Match": 0,
           "Semantically Related": 0,
           "Needs Review": 0,
-          "Missing Skill": 6
+          "Missing Skill": 10
         }
       }
     },
     "hybridOnCalibrationSet": {
-      "accuracy": 0.8888888888888888,
-      "macroF1": 0.9138461538461538,
+      "accuracy": 0.8108108108108109,
+      "macroF1": 0.8466666666666667,
       "perClass": {
         "Exact Match": {
           "precision": 1,
           "recall": 1,
           "f1": 1,
-          "support": 3
+          "support": 4
         },
         "Alias Match": {
           "precision": 1,
           "recall": 1,
           "f1": 1,
-          "support": 4
+          "support": 5
         },
         "Semantically Related": {
-          "precision": 1,
-          "recall": 0.6666666666666666,
-          "f1": 0.8,
-          "support": 9
-        },
-        "Needs Review": {
           "precision": 0.625,
-          "recall": 1,
-          "f1": 0.7692307692307693,
-          "support": 5
+          "recall": 0.7142857142857143,
+          "f1": 0.6666666666666666,
+          "support": 7
+        },
+        "Needs Review": {
+          "precision": 0.7,
+          "recall": 0.6363636363636364,
+          "f1": 0.6666666666666666,
+          "support": 11
         },
         "Missing Skill": {
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "support": 6
+          "precision": 0.9,
+          "recall": 0.9,
+          "f1": 0.9,
+          "support": 10
         }
       },
       "confusionMatrix": {
         "Exact Match": {
-          "Exact Match": 3,
+          "Exact Match": 4,
           "Alias Match": 0,
           "Semantically Related": 0,
           "Needs Review": 0,
@@ -141,80 +141,7 @@
         },
         "Alias Match": {
           "Exact Match": 0,
-          "Alias Match": 4,
-          "Semantically Related": 0,
-          "Needs Review": 0,
-          "Missing Skill": 0
-        },
-        "Semantically Related": {
-          "Exact Match": 0,
-          "Alias Match": 0,
-          "Semantically Related": 6,
-          "Needs Review": 3,
-          "Missing Skill": 0
-        },
-        "Needs Review": {
-          "Exact Match": 0,
-          "Alias Match": 0,
-          "Semantically Related": 0,
-          "Needs Review": 5,
-          "Missing Skill": 0
-        },
-        "Missing Skill": {
-          "Exact Match": 0,
-          "Alias Match": 0,
-          "Semantically Related": 0,
-          "Needs Review": 0,
-          "Missing Skill": 6
-        }
-      }
-    },
-    "hybridLeaveOneOut": {
-      "accuracy": 0.8148148148148148,
-      "macroF1": 0.8564102564102566,
-      "perClass": {
-        "Exact Match": {
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "support": 3
-        },
-        "Alias Match": {
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "support": 4
-        },
-        "Semantically Related": {
-          "precision": 0.8333333333333334,
-          "recall": 0.5555555555555556,
-          "f1": 0.6666666666666667,
-          "support": 9
-        },
-        "Needs Review": {
-          "precision": 0.5,
-          "recall": 0.8,
-          "f1": 0.6153846153846154,
-          "support": 5
-        },
-        "Missing Skill": {
-          "precision": 1,
-          "recall": 1,
-          "f1": 1,
-          "support": 6
-        }
-      },
-      "confusionMatrix": {
-        "Exact Match": {
-          "Exact Match": 3,
-          "Alias Match": 0,
-          "Semantically Related": 0,
-          "Needs Review": 0,
-          "Missing Skill": 0
-        },
-        "Alias Match": {
-          "Exact Match": 0,
-          "Alias Match": 4,
+          "Alias Match": 5,
           "Semantically Related": 0,
           "Needs Review": 0,
           "Missing Skill": 0
@@ -223,25 +150,316 @@
           "Exact Match": 0,
           "Alias Match": 0,
           "Semantically Related": 5,
-          "Needs Review": 4,
+          "Needs Review": 2,
           "Missing Skill": 0
         },
         "Needs Review": {
           "Exact Match": 0,
           "Alias Match": 0,
-          "Semantically Related": 1,
-          "Needs Review": 4,
-          "Missing Skill": 0
+          "Semantically Related": 3,
+          "Needs Review": 7,
+          "Missing Skill": 1
         },
         "Missing Skill": {
           "Exact Match": 0,
           "Alias Match": 0,
           "Semantically Related": 0,
+          "Needs Review": 1,
+          "Missing Skill": 9
+        }
+      }
+    },
+    "hybridLeaveOneOut": {
+      "accuracy": 0.6756756756756757,
+      "macroF1": 0.7449441786283891,
+      "perClass": {
+        "Exact Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 4
+        },
+        "Alias Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 5
+        },
+        "Semantically Related": {
+          "precision": 0.5,
+          "recall": 0.5714285714285714,
+          "f1": 0.5333333333333333,
+          "support": 7
+        },
+        "Needs Review": {
+          "precision": 0.45454545454545453,
+          "recall": 0.45454545454545453,
+          "f1": 0.45454545454545453,
+          "support": 11
+        },
+        "Missing Skill": {
+          "precision": 0.7777777777777778,
+          "recall": 0.7,
+          "f1": 0.7368421052631577,
+          "support": 10
+        }
+      },
+      "confusionMatrix": {
+        "Exact Match": {
+          "Exact Match": 4,
+          "Alias Match": 0,
+          "Semantically Related": 0,
           "Needs Review": 0,
-          "Missing Skill": 6
+          "Missing Skill": 0
+        },
+        "Alias Match": {
+          "Exact Match": 0,
+          "Alias Match": 5,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Semantically Related": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 4,
+          "Needs Review": 3,
+          "Missing Skill": 0
+        },
+        "Needs Review": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 4,
+          "Needs Review": 5,
+          "Missing Skill": 2
+        },
+        "Missing Skill": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 3,
+          "Missing Skill": 7
         }
       }
     }
+  },
+  "relationshipCounts": {
+    "exact": 4,
+    "alias": 5,
+    "true_semantic": 7,
+    "related_non_equivalent": 10,
+    "unrelated": 10,
+    "ambiguous": 1
+  },
+  "evidenceEvaluation": {
+    "evidenceClassification": {
+      "accuracy": 1,
+      "macroF1": 1,
+      "perClass": {
+        "Positive Assertion": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 1
+        },
+        "Negative Assertion": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 1
+        },
+        "Uncertain/Familiarity-only": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 2
+        },
+        "Learning/In-progress": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 1
+        },
+        "No Evidence": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 1
+        }
+      },
+      "confusionMatrix": {
+        "Positive Assertion": {
+          "Positive Assertion": 1,
+          "Negative Assertion": 0,
+          "Uncertain/Familiarity-only": 0,
+          "Learning/In-progress": 0,
+          "No Evidence": 0
+        },
+        "Negative Assertion": {
+          "Positive Assertion": 0,
+          "Negative Assertion": 1,
+          "Uncertain/Familiarity-only": 0,
+          "Learning/In-progress": 0,
+          "No Evidence": 0
+        },
+        "Uncertain/Familiarity-only": {
+          "Positive Assertion": 0,
+          "Negative Assertion": 0,
+          "Uncertain/Familiarity-only": 2,
+          "Learning/In-progress": 0,
+          "No Evidence": 0
+        },
+        "Learning/In-progress": {
+          "Positive Assertion": 0,
+          "Negative Assertion": 0,
+          "Uncertain/Familiarity-only": 0,
+          "Learning/In-progress": 1,
+          "No Evidence": 0
+        },
+        "No Evidence": {
+          "Positive Assertion": 0,
+          "Negative Assertion": 0,
+          "Uncertain/Familiarity-only": 0,
+          "Learning/In-progress": 0,
+          "No Evidence": 1
+        }
+      }
+    },
+    "matchClassification": {
+      "accuracy": 1,
+      "macroF1": 0.6,
+      "perClass": {
+        "Exact Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 1
+        },
+        "Alias Match": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0
+        },
+        "Semantically Related": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 0
+        },
+        "Missing Skill": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 2
+        },
+        "Needs Review": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 3
+        }
+      },
+      "confusionMatrix": {
+        "Exact Match": {
+          "Exact Match": 1,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Missing Skill": 0,
+          "Needs Review": 0
+        },
+        "Alias Match": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Missing Skill": 0,
+          "Needs Review": 0
+        },
+        "Semantically Related": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Missing Skill": 0,
+          "Needs Review": 0
+        },
+        "Missing Skill": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Missing Skill": 2,
+          "Needs Review": 0
+        },
+        "Needs Review": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Missing Skill": 0,
+          "Needs Review": 3
+        }
+      }
+    },
+    "examples": [
+      {
+        "id": "evidence-negative-docker",
+        "skill": "Docker",
+        "section": "experience",
+        "evidence": "No hands-on experience with Docker.",
+        "expected": "Negative Assertion",
+        "expectedMatch": "Missing Skill",
+        "predictedEvidence": "Negative Assertion",
+        "predictedMatch": "Missing Skill"
+      },
+      {
+        "id": "evidence-uncertain-familiar",
+        "skill": "Docker",
+        "section": "summary",
+        "evidence": "Familiar with Docker and have basic knowledge of its workflow.",
+        "expected": "Uncertain/Familiarity-only",
+        "expectedMatch": "Needs Review",
+        "predictedEvidence": "Uncertain/Familiarity-only",
+        "predictedMatch": "Needs Review"
+      },
+      {
+        "id": "evidence-learning",
+        "skill": "Docker",
+        "section": "summary",
+        "evidence": "Currently learning Docker through a guided course.",
+        "expected": "Learning/In-progress",
+        "expectedMatch": "Needs Review",
+        "predictedEvidence": "Learning/In-progress",
+        "predictedMatch": "Needs Review"
+      },
+      {
+        "id": "evidence-positive",
+        "skill": "Docker",
+        "section": "experience",
+        "evidence": "Built and operated deployment workflows with Docker.",
+        "expected": "Positive Assertion",
+        "expectedMatch": "Exact Match",
+        "predictedEvidence": "Positive Assertion",
+        "predictedMatch": "Exact Match"
+      },
+      {
+        "id": "evidence-skills-list",
+        "skill": "Docker",
+        "section": "skills",
+        "evidence": "Docker",
+        "expected": "Uncertain/Familiarity-only",
+        "expectedMatch": "Needs Review",
+        "predictedEvidence": "Uncertain/Familiarity-only",
+        "predictedMatch": "Needs Review"
+      },
+      {
+        "id": "evidence-none",
+        "skill": "Docker",
+        "section": "experience",
+        "evidence": "Built a web application using Python.",
+        "expected": "No Evidence",
+        "expectedMatch": "Missing Skill",
+        "predictedEvidence": "No Evidence",
+        "predictedMatch": "Missing Skill"
+      }
+    ]
   },
   "pairs": [
     {
@@ -249,6 +467,7 @@
       "requiredSkill": "React",
       "candidateSkill": "React",
       "expected": "Exact Match",
+      "relationship": "exact",
       "predicted": "Exact Match",
       "cosineSimilarity": 1
     },
@@ -257,6 +476,7 @@
       "requiredSkill": "PostgreSQL",
       "candidateSkill": "PostgreSQL",
       "expected": "Exact Match",
+      "relationship": "exact",
       "predicted": "Exact Match",
       "cosineSimilarity": 1
     },
@@ -265,6 +485,16 @@
       "requiredSkill": "Python",
       "candidateSkill": "Python",
       "expected": "Exact Match",
+      "relationship": "exact",
+      "predicted": "Exact Match",
+      "cosineSimilarity": 1
+    },
+    {
+      "id": "exact-tensorflow",
+      "requiredSkill": "TensorFlow",
+      "candidateSkill": "TensorFlow",
+      "expected": "Exact Match",
+      "relationship": "exact",
       "predicted": "Exact Match",
       "cosineSimilarity": 1
     },
@@ -273,6 +503,7 @@
       "requiredSkill": "React",
       "candidateSkill": "React.js",
       "expected": "Alias Match",
+      "relationship": "alias",
       "predicted": "Alias Match",
       "cosineSimilarity": 0.8829098675504
     },
@@ -281,6 +512,7 @@
       "requiredSkill": "PostgreSQL",
       "candidateSkill": "Postgres",
       "expected": "Alias Match",
+      "relationship": "alias",
       "predicted": "Alias Match",
       "cosineSimilarity": 0.8989252750127044
     },
@@ -289,6 +521,7 @@
       "requiredSkill": "Kubernetes",
       "candidateSkill": "K8s",
       "expected": "Alias Match",
+      "relationship": "alias",
       "predicted": "Alias Match",
       "cosineSimilarity": 0.46988354408922306
     },
@@ -297,14 +530,25 @@
       "requiredSkill": "JavaScript",
       "candidateSkill": "JS",
       "expected": "Alias Match",
+      "relationship": "alias",
       "predicted": "Alias Match",
       "cosineSimilarity": 0.8287307090131862
     },
     {
-      "id": "semantic-rest",
+      "id": "alias-machine-learning",
+      "requiredSkill": "Machine Learning",
+      "candidateSkill": "ML",
+      "expected": "Alias Match",
+      "relationship": "alias",
+      "predicted": "Alias Match",
+      "cosineSimilarity": 0.37266334505039395
+    },
+    {
+      "id": "semantic-rest-paraphrase",
       "requiredSkill": "REST API development",
       "candidateSkill": "HTTP endpoint design and implementation",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Semantically Related",
       "cosineSimilarity": 0.5262006590513072
     },
@@ -313,6 +557,7 @@
       "requiredSkill": "Automated software testing",
       "candidateSkill": "Writing unit and integration tests",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Needs Review",
       "cosineSimilarity": 0.38635846544030433
     },
@@ -321,6 +566,7 @@
       "requiredSkill": "SQL query optimization",
       "candidateSkill": "Relational database query tuning",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Semantically Related",
       "cosineSimilarity": 0.7368751081172865
     },
@@ -329,6 +575,7 @@
       "requiredSkill": "Container orchestration",
       "candidateSkill": "Scheduling container workloads across clusters",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Semantically Related",
       "cosineSimilarity": 0.607048579534803
     },
@@ -337,6 +584,7 @@
       "requiredSkill": "Continuous integration and delivery",
       "candidateSkill": "Automating build, test, and deployment workflows",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Needs Review",
       "cosineSimilarity": 0.30773546713788286
     },
@@ -345,7 +593,8 @@
       "requiredSkill": "Accessible web interface development",
       "candidateSkill": "Building keyboard-friendly browser user interfaces",
       "expected": "Semantically Related",
-      "predicted": "Needs Review",
+      "relationship": "true_semantic",
+      "predicted": "Semantically Related",
       "cosineSimilarity": 0.5061674016898841
     },
     {
@@ -353,30 +602,79 @@
       "requiredSkill": "Cloud object storage",
       "candidateSkill": "Storing files in managed cloud buckets",
       "expected": "Semantically Related",
+      "relationship": "true_semantic",
       "predicted": "Semantically Related",
       "cosineSimilarity": 0.6545611424511047
     },
     {
-      "id": "semantic-node-express",
+      "id": "related-rest-api-development",
+      "requiredSkill": "REST APIs",
+      "candidateSkill": "API Development",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.6644247615728712
+    },
+    {
+      "id": "related-frontend-react",
+      "requiredSkill": "Frontend Development",
+      "candidateSkill": "React.js",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.24199027250812177
+    },
+    {
+      "id": "related-node-express",
       "requiredSkill": "Node.js",
       "candidateSkill": "Express.js",
-      "expected": "Semantically Related",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
       "predicted": "Semantically Related",
       "cosineSimilarity": 0.6413734316057618
     },
     {
-      "id": "semantic-react-native",
-      "requiredSkill": "React",
-      "candidateSkill": "React Native",
-      "expected": "Semantically Related",
-      "predicted": "Semantically Related",
-      "cosineSimilarity": 0.7395880469960983
+      "id": "related-docker-kubernetes",
+      "requiredSkill": "Docker",
+      "candidateSkill": "Kubernetes",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.31507396936031046
+    },
+    {
+      "id": "related-tensorflow-pytorch",
+      "requiredSkill": "TensorFlow",
+      "candidateSkill": "PyTorch",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.48642024505453296
+    },
+    {
+      "id": "related-react-html",
+      "requiredSkill": "React.js",
+      "candidateSkill": "HTML",
+      "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.18714049436456812
+    },
+    {
+      "id": "ambiguous-cpp",
+      "requiredSkill": "C++",
+      "candidateSkill": "CPP",
+      "expected": "Needs Review",
+      "relationship": "ambiguous",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.4485387476793004
     },
     {
       "id": "review-typescript",
       "requiredSkill": "JavaScript",
       "candidateSkill": "TypeScript",
       "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
       "predicted": "Needs Review",
       "cosineSimilarity": 0.40075945210135017
     },
@@ -385,22 +683,16 @@
       "requiredSkill": "PostgreSQL",
       "candidateSkill": "MongoDB",
       "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
       "predicted": "Needs Review",
       "cosineSimilarity": 0.34782692701393014
-    },
-    {
-      "id": "review-docker-k8s",
-      "requiredSkill": "Docker",
-      "candidateSkill": "Kubernetes",
-      "expected": "Needs Review",
-      "predicted": "Needs Review",
-      "cosineSimilarity": 0.31507396936031046
     },
     {
       "id": "review-aws-azure",
       "requiredSkill": "AWS",
       "candidateSkill": "Azure",
       "expected": "Needs Review",
+      "relationship": "related_non_equivalent",
       "predicted": "Needs Review",
       "cosineSimilarity": 0.43958846430548515
     },
@@ -409,14 +701,52 @@
       "requiredSkill": "SQL",
       "candidateSkill": "PostgreSQL",
       "expected": "Needs Review",
-      "predicted": "Needs Review",
+      "relationship": "related_non_equivalent",
+      "predicted": "Semantically Related",
       "cosineSimilarity": 0.5085058276704062
+    },
+    {
+      "id": "missing-docker-python",
+      "requiredSkill": "Docker",
+      "candidateSkill": "Python",
+      "expected": "Missing Skill",
+      "relationship": "unrelated",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.2349969139085646
+    },
+    {
+      "id": "missing-aws-mongodb",
+      "requiredSkill": "AWS",
+      "candidateSkill": "MongoDB",
+      "expected": "Missing Skill",
+      "relationship": "unrelated",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.21435243113816127
+    },
+    {
+      "id": "missing-java-javascript",
+      "requiredSkill": "Java",
+      "candidateSkill": "JavaScript",
+      "expected": "Missing Skill",
+      "relationship": "unrelated",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.40363158255464765
+    },
+    {
+      "id": "missing-tensorflow-sql",
+      "requiredSkill": "TensorFlow",
+      "candidateSkill": "SQL",
+      "expected": "Missing Skill",
+      "relationship": "unrelated",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.11020611755999397
     },
     {
       "id": "missing-react-sql",
       "requiredSkill": "React",
       "candidateSkill": "SQL",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.030650365710013804
     },
@@ -425,6 +755,7 @@
       "requiredSkill": "Java",
       "candidateSkill": "Kubernetes",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.1490821893073169
     },
@@ -433,6 +764,7 @@
       "requiredSkill": "CSS",
       "candidateSkill": "Database transaction processing",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.18357423505733475
     },
@@ -441,6 +773,7 @@
       "requiredSkill": "REST API development",
       "candidateSkill": "Agile project planning",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.1371857106305402
     },
@@ -449,6 +782,7 @@
       "requiredSkill": "AWS",
       "candidateSkill": "Scrum facilitation",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.13274157228579525
     },
@@ -457,6 +791,7 @@
       "requiredSkill": "User experience research",
       "candidateSkill": "Kubernetes cluster administration",
       "expected": "Missing Skill",
+      "relationship": "unrelated",
       "predicted": "Missing Skill",
       "cosineSimilarity": 0.031190718288055672
     }
@@ -466,5 +801,5 @@
     "Semantically Related is a reviewable association, not evidence of equivalent proficiency.",
     "Expand and independently review a representative labeled dataset before changing thresholds for production use."
   ],
-  "measuredAt": "2026-11-01T08:12:12.653Z"
+  "measuredAt": "2026-11-01T10:22:39.979Z"
 }

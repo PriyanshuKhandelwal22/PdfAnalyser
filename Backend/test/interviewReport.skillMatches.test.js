@@ -16,8 +16,18 @@ function reportWithMatch(match) {
 }
 
 test("skill match schema accepts signed cosine similarity and known classifications", async () => {
-    const report = reportWithMatch({ similarity: -0.25 });
+    const report = reportWithMatch({
+        similarity: -0.25,
+        candidateEvidenceClassification: "Uncertain/Familiarity-only",
+        requiredEvidence: [{
+            matchedText: "React.js",
+            source: "jobDescription",
+            section: "requiredSkills",
+            evidence: "React.js experience required.",
+        }],
+    });
     await assert.doesNotReject(report.validate());
+    assert.equal(report.skillMatches[0].requiredEvidence[0].evidence, "React.js experience required.");
 });
 
 test("skill match schema rejects out-of-range similarity and unknown classifications", async () => {
