@@ -9,6 +9,7 @@ const NAV_ITEMS = [
     { id: 'technical', label: 'Technical Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>) },
     { id: 'behavioral', label: 'Behavioral Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>) },
     { id: 'roadmap', label: 'Road Map', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>) },
+    { id: 'skills', label: 'Skill Matching', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="7" r="3" /><circle cx="16" cy="17" r="3" /><path d="M11.5 9.5 14 14.5M5 17h5M14 7h5" /></svg>) },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -154,6 +155,43 @@ const Interview = () => {
                                     <RoadMapDay key={day.day} day={day} />
                                 ))}
                             </div>
+                        </section>
+                    )}
+
+                    {activeNav === 'skills' && (
+                        <section className='skill-matching'>
+                            <div className='content-header'>
+                                <h2>Skill Matching</h2>
+                                <span className='content-header__count'>{report.skillMatches?.length || 0} requirements</span>
+                            </div>
+                            <p className='skill-matching__notice'>A semantic relationship is not proof of equivalent proficiency. Review the candidate evidence before drawing conclusions.</p>
+                            {report.skillMatches?.length ? (
+                                <div className='skill-matching__list'>
+                                    {report.skillMatches.map((match, index) => (
+                                        <article className='skill-match-card' key={`${match.requiredSkill}-${index}`}>
+                                            <div className='skill-match-card__header'>
+                                                <h3>{match.requiredSkill}</h3>
+                                                <span className={`skill-match-card__classification skill-match-card__classification--${match.classification.toLowerCase().replaceAll(' ', '-')}`}>
+                                                    {match.classification}
+                                                </span>
+                                            </div>
+                                            <p className='skill-match-card__candidate'>Candidate evidence: {match.candidateSkill || 'No matching skill identified'}</p>
+                                            {Number.isFinite(match.similarity) && (
+                                                <p className='skill-match-card__score'>Cosine similarity: {match.similarity.toFixed(3)}</p>
+                                            )}
+                                            <p className='skill-match-card__explanation'>{match.explanation}</p>
+                                            {match.candidateEvidence && (
+                                                <blockquote className='skill-match-card__evidence'>
+                                                    <p>{match.candidateEvidence}</p>
+                                                    <cite>{[match.candidateSource, match.candidateSection].filter(Boolean).join(' · ')}</cite>
+                                                </blockquote>
+                                            )}
+                                        </article>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className='skill-matching__empty'>No skill-match analysis is available for this report.</p>
+                            )}
                         </section>
                     )}
                 </main>

@@ -1,0 +1,470 @@
+{
+  "dataset": {
+    "name": "analyser-skill-match-mini-v1",
+    "pairCount": 27
+  },
+  "model": {
+    "id": "onnx-community/all-MiniLM-L6-v2-ONNX",
+    "dimensions": 384
+  },
+  "thresholds": {
+    "reviewThreshold": 0.24565485109760882,
+    "semanticThreshold": 0.5173532433608568
+  },
+  "calibration": {
+    "reviewThreshold": 0.24565485109760882,
+    "semanticThreshold": 0.5173532433608568,
+    "calibrationMacroF1": 0.8564102564102565,
+    "calibrationSemanticPrecision": 1,
+    "calibrationPairCount": 20,
+    "macroF1": 0.8564102564102565,
+    "semanticPrecision": 1,
+    "pairCount": 20,
+    "method": "Joint macro-F1 threshold search over the labeled synthetic semantic/review/missing pairs; leave-one-out metrics are reported separately."
+  },
+  "comparison": {
+    "exactAliasBaseline": {
+      "accuracy": 0.48148148148148145,
+      "macroF1": 0.49230769230769234,
+      "perClass": {
+        "Exact Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 3
+        },
+        "Alias Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 4
+        },
+        "Semantically Related": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 9
+        },
+        "Needs Review": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "support": 5
+        },
+        "Missing Skill": {
+          "precision": 0.3,
+          "recall": 1,
+          "f1": 0.4615384615384615,
+          "support": 6
+        }
+      },
+      "confusionMatrix": {
+        "Exact Match": {
+          "Exact Match": 3,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Alias Match": {
+          "Exact Match": 0,
+          "Alias Match": 4,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Semantically Related": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 9
+        },
+        "Needs Review": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 5
+        },
+        "Missing Skill": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 6
+        }
+      }
+    },
+    "hybridOnCalibrationSet": {
+      "accuracy": 0.8888888888888888,
+      "macroF1": 0.9138461538461538,
+      "perClass": {
+        "Exact Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 3
+        },
+        "Alias Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 4
+        },
+        "Semantically Related": {
+          "precision": 1,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 9
+        },
+        "Needs Review": {
+          "precision": 0.625,
+          "recall": 1,
+          "f1": 0.7692307692307693,
+          "support": 5
+        },
+        "Missing Skill": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 6
+        }
+      },
+      "confusionMatrix": {
+        "Exact Match": {
+          "Exact Match": 3,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Alias Match": {
+          "Exact Match": 0,
+          "Alias Match": 4,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Semantically Related": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 6,
+          "Needs Review": 3,
+          "Missing Skill": 0
+        },
+        "Needs Review": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 5,
+          "Missing Skill": 0
+        },
+        "Missing Skill": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 6
+        }
+      }
+    },
+    "hybridLeaveOneOut": {
+      "accuracy": 0.8148148148148148,
+      "macroF1": 0.8564102564102566,
+      "perClass": {
+        "Exact Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 3
+        },
+        "Alias Match": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 4
+        },
+        "Semantically Related": {
+          "precision": 0.8333333333333334,
+          "recall": 0.5555555555555556,
+          "f1": 0.6666666666666667,
+          "support": 9
+        },
+        "Needs Review": {
+          "precision": 0.5,
+          "recall": 0.8,
+          "f1": 0.6153846153846154,
+          "support": 5
+        },
+        "Missing Skill": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "support": 6
+        }
+      },
+      "confusionMatrix": {
+        "Exact Match": {
+          "Exact Match": 3,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Alias Match": {
+          "Exact Match": 0,
+          "Alias Match": 4,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 0
+        },
+        "Semantically Related": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 5,
+          "Needs Review": 4,
+          "Missing Skill": 0
+        },
+        "Needs Review": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 1,
+          "Needs Review": 4,
+          "Missing Skill": 0
+        },
+        "Missing Skill": {
+          "Exact Match": 0,
+          "Alias Match": 0,
+          "Semantically Related": 0,
+          "Needs Review": 0,
+          "Missing Skill": 6
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "id": "exact-react",
+      "requiredSkill": "React",
+      "candidateSkill": "React",
+      "expected": "Exact Match",
+      "predicted": "Exact Match",
+      "cosineSimilarity": 1
+    },
+    {
+      "id": "exact-postgres",
+      "requiredSkill": "PostgreSQL",
+      "candidateSkill": "PostgreSQL",
+      "expected": "Exact Match",
+      "predicted": "Exact Match",
+      "cosineSimilarity": 1
+    },
+    {
+      "id": "exact-python",
+      "requiredSkill": "Python",
+      "candidateSkill": "Python",
+      "expected": "Exact Match",
+      "predicted": "Exact Match",
+      "cosineSimilarity": 1
+    },
+    {
+      "id": "alias-react",
+      "requiredSkill": "React",
+      "candidateSkill": "React.js",
+      "expected": "Alias Match",
+      "predicted": "Alias Match",
+      "cosineSimilarity": 0.8829098675504
+    },
+    {
+      "id": "alias-postgres",
+      "requiredSkill": "PostgreSQL",
+      "candidateSkill": "Postgres",
+      "expected": "Alias Match",
+      "predicted": "Alias Match",
+      "cosineSimilarity": 0.8989252750127044
+    },
+    {
+      "id": "alias-kubernetes",
+      "requiredSkill": "Kubernetes",
+      "candidateSkill": "K8s",
+      "expected": "Alias Match",
+      "predicted": "Alias Match",
+      "cosineSimilarity": 0.46988354408922306
+    },
+    {
+      "id": "alias-js",
+      "requiredSkill": "JavaScript",
+      "candidateSkill": "JS",
+      "expected": "Alias Match",
+      "predicted": "Alias Match",
+      "cosineSimilarity": 0.8287307090131862
+    },
+    {
+      "id": "semantic-rest",
+      "requiredSkill": "REST API development",
+      "candidateSkill": "HTTP endpoint design and implementation",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.5262006590513072
+    },
+    {
+      "id": "semantic-testing",
+      "requiredSkill": "Automated software testing",
+      "candidateSkill": "Writing unit and integration tests",
+      "expected": "Semantically Related",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.38635846544030433
+    },
+    {
+      "id": "semantic-sql",
+      "requiredSkill": "SQL query optimization",
+      "candidateSkill": "Relational database query tuning",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.7368751081172865
+    },
+    {
+      "id": "semantic-containers",
+      "requiredSkill": "Container orchestration",
+      "candidateSkill": "Scheduling container workloads across clusters",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.607048579534803
+    },
+    {
+      "id": "semantic-ci",
+      "requiredSkill": "Continuous integration and delivery",
+      "candidateSkill": "Automating build, test, and deployment workflows",
+      "expected": "Semantically Related",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.30773546713788286
+    },
+    {
+      "id": "semantic-ui",
+      "requiredSkill": "Accessible web interface development",
+      "candidateSkill": "Building keyboard-friendly browser user interfaces",
+      "expected": "Semantically Related",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.5061674016898841
+    },
+    {
+      "id": "semantic-cloud-storage",
+      "requiredSkill": "Cloud object storage",
+      "candidateSkill": "Storing files in managed cloud buckets",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.6545611424511047
+    },
+    {
+      "id": "semantic-node-express",
+      "requiredSkill": "Node.js",
+      "candidateSkill": "Express.js",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.6413734316057618
+    },
+    {
+      "id": "semantic-react-native",
+      "requiredSkill": "React",
+      "candidateSkill": "React Native",
+      "expected": "Semantically Related",
+      "predicted": "Semantically Related",
+      "cosineSimilarity": 0.7395880469960983
+    },
+    {
+      "id": "review-typescript",
+      "requiredSkill": "JavaScript",
+      "candidateSkill": "TypeScript",
+      "expected": "Needs Review",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.40075945210135017
+    },
+    {
+      "id": "review-postgres-mongo",
+      "requiredSkill": "PostgreSQL",
+      "candidateSkill": "MongoDB",
+      "expected": "Needs Review",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.34782692701393014
+    },
+    {
+      "id": "review-docker-k8s",
+      "requiredSkill": "Docker",
+      "candidateSkill": "Kubernetes",
+      "expected": "Needs Review",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.31507396936031046
+    },
+    {
+      "id": "review-aws-azure",
+      "requiredSkill": "AWS",
+      "candidateSkill": "Azure",
+      "expected": "Needs Review",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.43958846430548515
+    },
+    {
+      "id": "review-sql-postgres",
+      "requiredSkill": "SQL",
+      "candidateSkill": "PostgreSQL",
+      "expected": "Needs Review",
+      "predicted": "Needs Review",
+      "cosineSimilarity": 0.5085058276704062
+    },
+    {
+      "id": "missing-react-sql",
+      "requiredSkill": "React",
+      "candidateSkill": "SQL",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.030650365710013804
+    },
+    {
+      "id": "missing-java-k8s",
+      "requiredSkill": "Java",
+      "candidateSkill": "Kubernetes",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.1490821893073169
+    },
+    {
+      "id": "missing-css-transaction",
+      "requiredSkill": "CSS",
+      "candidateSkill": "Database transaction processing",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.18357423505733475
+    },
+    {
+      "id": "missing-rest-agile",
+      "requiredSkill": "REST API development",
+      "candidateSkill": "Agile project planning",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.1371857106305402
+    },
+    {
+      "id": "missing-aws-scrum",
+      "requiredSkill": "AWS",
+      "candidateSkill": "Scrum facilitation",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.13274157228579525
+    },
+    {
+      "id": "missing-ux-kubernetes",
+      "requiredSkill": "User experience research",
+      "candidateSkill": "Kubernetes cluster administration",
+      "expected": "Missing Skill",
+      "predicted": "Missing Skill",
+      "cosineSimilarity": 0.031190718288055672
+    }
+  ],
+  "limitations": [
+    "This small synthetic fixture is for initial threshold calibration, not production-quality validation.",
+    "Semantically Related is a reviewable association, not evidence of equivalent proficiency.",
+    "Expand and independently review a representative labeled dataset before changing thresholds for production use."
+  ],
+  "measuredAt": "2026-11-01T08:12:12.653Z"
+}

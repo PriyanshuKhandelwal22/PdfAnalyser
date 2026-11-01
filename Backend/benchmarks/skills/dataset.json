@@ -1,0 +1,33 @@
+{
+  "name": "analyser-skill-match-mini-v1",
+  "note": "Synthetic skill-term pairs only. Labels distinguish direct wording, known aliases, conceptual skill matches, adjacent technologies, and unrelated skills; similarity is not proof of candidate proficiency.",
+  "pairs": [
+    { "id": "exact-react", "requiredSkill": "React", "candidateSkill": "React", "label": "Exact Match" },
+    { "id": "exact-postgres", "requiredSkill": "PostgreSQL", "candidateSkill": "PostgreSQL", "label": "Exact Match" },
+    { "id": "exact-python", "requiredSkill": "Python", "candidateSkill": "Python", "label": "Exact Match" },
+    { "id": "alias-react", "requiredSkill": "React", "candidateSkill": "React.js", "label": "Alias Match" },
+    { "id": "alias-postgres", "requiredSkill": "PostgreSQL", "candidateSkill": "Postgres", "label": "Alias Match" },
+    { "id": "alias-kubernetes", "requiredSkill": "Kubernetes", "candidateSkill": "K8s", "label": "Alias Match" },
+    { "id": "alias-js", "requiredSkill": "JavaScript", "candidateSkill": "JS", "label": "Alias Match" },
+    { "id": "semantic-rest", "requiredSkill": "REST API development", "candidateSkill": "HTTP endpoint design and implementation", "label": "Semantically Related" },
+    { "id": "semantic-testing", "requiredSkill": "Automated software testing", "candidateSkill": "Writing unit and integration tests", "label": "Semantically Related" },
+    { "id": "semantic-sql", "requiredSkill": "SQL query optimization", "candidateSkill": "Relational database query tuning", "label": "Semantically Related" },
+    { "id": "semantic-containers", "requiredSkill": "Container orchestration", "candidateSkill": "Scheduling container workloads across clusters", "label": "Semantically Related" },
+    { "id": "semantic-ci", "requiredSkill": "Continuous integration and delivery", "candidateSkill": "Automating build, test, and deployment workflows", "label": "Semantically Related" },
+    { "id": "semantic-ui", "requiredSkill": "Accessible web interface development", "candidateSkill": "Building keyboard-friendly browser user interfaces", "label": "Semantically Related" },
+    { "id": "semantic-cloud-storage", "requiredSkill": "Cloud object storage", "candidateSkill": "Storing files in managed cloud buckets", "label": "Semantically Related" },
+    { "id": "semantic-node-express", "requiredSkill": "Node.js", "candidateSkill": "Express.js", "label": "Semantically Related" },
+    { "id": "semantic-react-native", "requiredSkill": "React", "candidateSkill": "React Native", "label": "Semantically Related" },
+    { "id": "review-typescript", "requiredSkill": "JavaScript", "candidateSkill": "TypeScript", "label": "Needs Review" },
+    { "id": "review-postgres-mongo", "requiredSkill": "PostgreSQL", "candidateSkill": "MongoDB", "label": "Needs Review" },
+    { "id": "review-docker-k8s", "requiredSkill": "Docker", "candidateSkill": "Kubernetes", "label": "Needs Review" },
+    { "id": "review-aws-azure", "requiredSkill": "AWS", "candidateSkill": "Azure", "label": "Needs Review" },
+    { "id": "review-sql-postgres", "requiredSkill": "SQL", "candidateSkill": "PostgreSQL", "label": "Needs Review" },
+    { "id": "missing-react-sql", "requiredSkill": "React", "candidateSkill": "SQL", "label": "Missing Skill" },
+    { "id": "missing-java-k8s", "requiredSkill": "Java", "candidateSkill": "Kubernetes", "label": "Missing Skill" },
+    { "id": "missing-css-transaction", "requiredSkill": "CSS", "candidateSkill": "Database transaction processing", "label": "Missing Skill" },
+    { "id": "missing-rest-agile", "requiredSkill": "REST API development", "candidateSkill": "Agile project planning", "label": "Missing Skill" },
+    { "id": "missing-aws-scrum", "requiredSkill": "AWS", "candidateSkill": "Scrum facilitation", "label": "Missing Skill" },
+    { "id": "missing-ux-kubernetes", "requiredSkill": "User experience research", "candidateSkill": "Kubernetes cluster administration", "label": "Missing Skill" }
+  ]
+}

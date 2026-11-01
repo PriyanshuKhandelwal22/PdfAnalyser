@@ -35,6 +35,26 @@ const SKILL_CATALOG = [
     { skill: "Scrum", aliases: ["Scrum"] },
 ];
 
+function normalizeSkillKey(value) {
+    return value
+        .normalize("NFKC")
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}+#]/gu, "");
+}
+
+const SKILL_ALIAS_LOOKUP = new Map(
+    SKILL_CATALOG.flatMap(({ skill, aliases }) => aliases.map((alias) => [normalizeSkillKey(alias), skill])),
+);
+
+function canonicalizeSkill(value) {
+    if (typeof value !== "string" || !value.trim()) {
+        return "";
+    }
+
+    const trimmedValue = value.trim();
+    return SKILL_ALIAS_LOOKUP.get(normalizeSkillKey(trimmedValue)) || trimmedValue;
+}
+
 const SECTION_ALIASES = {
     summary: ["summary", "professional summary", "profile", "professional profile", "career objective", "objective"],
     skills: ["skills", "technical skills", "core skills", "skills and technologies", "technical skills and tools", "technologies"],
@@ -215,8 +235,10 @@ function formatDocumentSections(document) {
 }
 
 module.exports = {
+    canonicalizeSkill,
     cleanText,
     extractSkills,
     formatDocumentSections,
+    normalizeSkillKey,
     preprocessDocument,
 };

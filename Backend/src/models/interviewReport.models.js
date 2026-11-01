@@ -49,6 +49,47 @@ const skillGapSchema = new mongoose.Schema({
     _id: false
 })
 
+const skillMatchSchema = new mongoose.Schema({
+    requiredSkill: {
+        type: String,
+        required: true,
+    },
+    candidateSkill: {
+        type: String,
+        default: null,
+    },
+    classification: {
+        type: String,
+        enum: [ "Exact Match", "Alias Match", "Semantically Related", "Missing Skill", "Needs Review" ],
+        required: true,
+    },
+    similarity: {
+        type: Number,
+        min: -1,
+        max: 1,
+        default: null,
+    },
+    candidateSource: {
+        type: String,
+        enum: [ "resume", "selfDescription", null ],
+        default: null,
+    },
+    candidateSection: {
+        type: String,
+        default: null,
+    },
+    candidateEvidence: {
+        type: String,
+        default: null,
+    },
+    explanation: {
+        type: String,
+        required: true,
+    },
+}, {
+    _id: false,
+})
+
 const preparationPlanSchema = new mongoose.Schema({
     day: {
         type: Number,
@@ -83,6 +124,10 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestions: [ technicalQuestionSchema ],
     behavioralQuestions: [ behavioralQuestionSchema ],
     skillGaps: [ skillGapSchema ],
+    skillMatches: {
+        type: [ skillMatchSchema ],
+        default: [],
+    },
     preparationPlan: [ preparationPlanSchema ],
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -99,4 +144,4 @@ const interviewReportSchema = new mongoose.Schema({
 
 const interviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);
 
-module.exports = interviewReportModel;  
+module.exports = interviewReportModel;

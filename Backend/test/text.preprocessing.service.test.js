@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 
 const {
+    canonicalizeSkill,
     cleanText,
     extractSkills,
     formatDocumentSections,
@@ -63,6 +64,13 @@ test("extractSkills canonicalizes explicit aliases and retains evidence provenan
     ]);
     assert.ok(document.skills.every(({ source, section, evidence }) =>
         source === "resume" && section === "skills" && evidence.startsWith("- React.js")));
+});
+
+test("canonicalizeSkill shares the preprocessing alias catalog", () => {
+    assert.equal(canonicalizeSkill("React.js"), "React");
+    assert.equal(canonicalizeSkill("K8s"), "Kubernetes");
+    assert.equal(canonicalizeSkill(" A skill outside the catalog "), "A skill outside the catalog");
+    assert.equal(canonicalizeSkill("  "), "");
 });
 
 test("related skills are not treated as aliases and React Native is not React", () => {
