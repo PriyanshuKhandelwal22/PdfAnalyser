@@ -32,6 +32,8 @@ M0 Free supports creating the Vector Search index through Atlas UI when the clus
 
 The source-of-truth configuration is [`embeddingChunks.vector-index.json`](../src/config/embeddingChunks.vector-index.json). Create the index before querying; no embeddings need to exist yet.
 
+The Atlas connection for this checkout currently has no `embeddingchunks` collection or Vector Search index, so a live `$vectorSearch` query is not yet verifiable. The configured Atlas cluster is MongoDB 8.0.36 at the time of verification. On M0/Free, create the Vector Search index through the Atlas UI if programmatic index creation is unsupported; check the cluster's current Search/Vector Search index allowance before creating it.
+
 ## M0 notes
 
 - Use the Atlas UI to create the index; do not run a programmatic index-creation command against the M0 cluster.
@@ -45,3 +47,7 @@ The source-of-truth configuration is [`embeddingChunks.vector-index.json`](../sr
 Every service operation first verifies `{ _id: reportId, user: ownerId }` against the existing `InterviewReport` collection. Every chunk mutation and vector query is additionally filtered by both `ownerId` and `reportId`; search also filters by embedding model and optionally by source. Never use an owner ID supplied by a frontend as the authenticated owner; pass the ID derived from `req.user` when a later phase calls this service.
 
 Stored chunks include `chunkId`, `source`, `section`, `text`, `contentHash`, `modelId`, and `embedding`. The compound unique key `{ ownerId, reportId, source, chunkId, modelId }` makes repeat upserts idempotent for a chunk and model version.
+
+Single-chunk deletion requires `ownerId`, `reportId`, `source`, and `chunkId`, and also filters by the configured `modelId`. Requiring `source` avoids deleting multiple records if a chunk ID is reused across document sources. A missing chunk returns `{ deletedCount: 0 }`; a report not owned by the caller raises `REPORT_NOT_FOUND` before any deletion.
+
+The declared Mongoose compound index is unique. A live synthetic MongoDB check confirmed that it rejects duplicate writes and that an index build fails with duplicate-key error `11000` when duplicate records already exist. Inspect and resolve duplicates before creating the index on an existing populated collection; do not drop/recreate an existing production index as an automatic repair.

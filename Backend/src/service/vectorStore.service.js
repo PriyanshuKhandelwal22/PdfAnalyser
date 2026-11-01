@@ -165,7 +165,26 @@ function createVectorStore({ ChunkModel, ReportModel }) {
         return { deletedCount: result.deletedCount || 0 };
     }
 
-    return { upsertChunks, searchChunks, deleteChunks };
+    async function deleteChunk({ ownerId: rawOwnerId, reportId: rawReportId, source, chunkId }) {
+        const ownerId = toObjectId(rawOwnerId, "ownerId");
+        const reportId = toObjectId(rawReportId, "reportId");
+        if (typeof chunkId !== "string" || !chunkId.trim()) {
+            throw new TypeError("chunkId must be a non-empty string.");
+        }
+        validateSource(source);
+        await assertOwnedReport(ownerId, reportId);
+
+        const result = await ChunkModel.deleteOne({
+            ownerId,
+            reportId,
+            source,
+            chunkId: chunkId.trim(),
+            modelId: vectorSearchConfig.modelId,
+        });
+        return { deletedCount: result.deletedCount || 0 };
+    }
+
+    return { upsertChunks, searchChunks, deleteChunks, deleteChunk };
 }
 
 module.exports = {
